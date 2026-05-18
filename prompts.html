@@ -44,25 +44,33 @@
       backdrop-filter: blur(24px);
       border-bottom: 1px solid rgba(124,58,237,.3);
     }
-    .nav-logo { display:flex; align-items:center; text-decoration:none; }
+    .nav-logo { display:flex; align-items:center; text-decoration:none; shrink:0; }
     .nav-logo-img { height:46px; width:auto; object-fit:contain; filter:drop-shadow(0 0 8px rgba(236,72,153,.35)); transition:filter .3s; }
     .nav-logo:hover .nav-logo-img { filter:drop-shadow(0 0 14px rgba(236,72,153,.65)); }
-    .nav-right { display:flex; align-items:center; gap:10px; }
+
+    /* center badge */
+    .nav-center-badge { position:absolute; left:50%; transform:translateX(-50%); }
+    .magic-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      background:rgba(124,58,237,.12); border:1px solid rgba(124,58,237,.4);
+      border-radius:50px; padding:6px 18px;
+      font-size:.78rem; font-weight:700; letter-spacing:.06em;
+      color:#c4b5fd; text-transform:uppercase; white-space:nowrap;
+    }
+    .magic-star {
+      background:linear-gradient(90deg,#ec4899,#7c3aed); -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent; background-clip:text; font-size:.65rem;
+    }
+
+    /* back button */
     .nav-back {
-      display:inline-flex; align-items:center; gap:6px;
-      background:transparent; border:1.5px solid rgba(124,58,237,.4);
+      display:inline-flex; align-items:center; gap:7px;
+      background:rgba(124,58,237,.1); border:1.5px solid rgba(124,58,237,.4);
       color:#c4b5fd; padding:8px 18px; border-radius:50px;
-      font-size:.84rem; font-weight:600; text-decoration:none;
+      font-size:.83rem; font-weight:600; text-decoration:none;
       transition:border-color .2s,color .2s,background .2s;
     }
-    .nav-back:hover { border-color:#7c3aed; background:rgba(124,58,237,.1); color:#fff; }
-    .nav-cta {
-      background:var(--grad); color:#fff;
-      padding:9px 22px; border-radius:50px; font-size:.84rem;
-      font-weight:700; text-decoration:none; display:inline-block;
-      transition:opacity .2s,transform .2s;
-    }
-    .nav-cta:hover { opacity:.88; transform:translateY(-1px); }
+    .nav-back:hover { border-color:#7c3aed; background:rgba(124,58,237,.18); color:#fff; }
 
     /* ══════════════════════════════════════
        PAGE HEADER
@@ -449,7 +457,8 @@
     @media (max-width:768px) {
       nav { height:auto; padding:10px 4%; flex-wrap:wrap; gap:8px; }
       .nav-logo-img { height:36px; }
-      .nav-back,.nav-cta { font-size:.74rem; padding:7px 13px; }
+      .nav-center-badge { display:none; }
+      .nav-back { font-size:.74rem; padding:7px 14px; }
       .page-header { padding:36px 4% 0; }
       .search-wrap { margin:0 4% 26px; max-width:100%; }
       .filter-section { padding:0 4% 20px; }
@@ -473,10 +482,19 @@
   <a href="index.html" class="nav-logo">
     <img src="image/logo.png" alt="Promptlyn" class="nav-logo-img" />
   </a>
-  <div class="nav-right">
-    <a href="index.html" class="nav-back">← Home</a>
-    <a href="https://facebook.com/promptlyn" target="_blank" class="nav-cta">Get Early Access →</a>
+
+  <div class="nav-center-badge">
+    <span class="magic-badge">
+      <span class="magic-star">✦</span>
+      <span id="magic-text">Prompt Library</span>
+      <span class="magic-star">✦</span>
+    </span>
   </div>
+
+  <a href="index.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Home
+  </a>
 </nav>
 
 <!-- ── PAGE HEADER ── -->
