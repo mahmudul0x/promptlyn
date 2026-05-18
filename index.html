@@ -112,6 +112,13 @@
       transition: opacity .2s, transform .2s;
     }
     .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+    .nav-ghost-btn {
+      background: transparent; border: 1.5px solid rgba(124,58,237,0.5);
+      color: #c4b5fd; padding: 8px 18px; border-radius: 50px;
+      font-size: 0.85rem; font-weight: 600;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .nav-ghost-btn:hover { border-color: #7c3aed; background: rgba(124,58,237,0.12); color: #fff; }
 
     /* ─── HERO ─── */
     #hero {
@@ -296,55 +303,162 @@
       padding: 3px 9px; border-radius: 50px; letter-spacing: 0.03em;
     }
 
-    /* ─── FEATURED PROMPTS ─── */
-    #featured { background: rgba(255,255,255,0.015); }
-    .prompt-grid {
+    /* ─── DEMO PROMPTS ─── */
+    #demo-prompts { background: rgba(255,255,255,0.015); }
+    .demo-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
     }
-    .prompt-card {
+    .demo-card {
       background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-left: 3px solid transparent;
-      border-image: linear-gradient(180deg, #ec4899, #7c3aed) 1;
-      border-radius: 14px; padding: 22px;
-      transition: transform .2s, box-shadow .2s;
-      display: flex; flex-direction: column;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px; overflow: hidden;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+      display: flex; flex-direction: column; cursor: pointer;
     }
-    .prompt-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(236,72,153,0.15);
+    .demo-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(124,58,237,0.5);
+      box-shadow: 0 16px 50px rgba(124,58,237,0.2);
     }
-    .p-badge {
-      display: inline-block; padding: 3px 10px; border-radius: 50px;
-      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em;
-      text-transform: uppercase; margin-bottom: 12px;
+    .demo-card-img {
+      width: 100%; height: 180px; object-fit: cover;
+      display: block;
     }
-    .p-title {
-      font-weight: 700; font-size: 1rem; margin-bottom: 8px;
-      color: rgba(255,255,255,0.93); line-height: 1.4;
+    .demo-card-img-placeholder {
+      width: 100%; height: 110px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem;
+      background: rgba(124,58,237,0.08);
     }
-    .p-preview {
-      font-size: 0.83rem; color: rgba(255,255,255,0.45);
-      line-height: 1.55; flex: 1; margin-bottom: 18px;
+    .demo-card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
+    .demo-card-badge {
+      display: inline-block; padding: 3px 11px; border-radius: 50px;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase; margin-bottom: 10px; width: fit-content;
     }
-    .p-copy {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: linear-gradient(135deg, rgba(236,72,153,0.15), rgba(124,58,237,0.15));
-      border: 1px solid rgba(124,58,237,0.4);
-      color: #c4b5fd; padding: 9px 18px; border-radius: 50px;
-      font-size: 0.82rem; font-weight: 600; cursor: pointer;
-      font-family: inherit; transition: background .2s, color .2s;
-      width: fit-content;
+    .demo-card-title {
+      font-weight: 700; font-size: 0.95rem; color: rgba(255,255,255,0.92);
+      line-height: 1.4; margin-bottom: 8px;
     }
-    .p-copy:hover {
-      background: linear-gradient(135deg, #ec4899, #7c3aed);
-      color: #fff; border-color: transparent;
+    .demo-card-preview {
+      font-size: 0.8rem; color: rgba(255,255,255,0.4);
+      line-height: 1.55; flex: 1; margin-bottom: 16px;
+      display: -webkit-box; -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical; overflow: hidden;
     }
-    .p-copy.copied {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: #fff; border-color: transparent;
+    .demo-card-actions { display: flex; gap: 8px; }
+    .demo-btn-copy {
+      flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(124,58,237,0.35);
+      color: #c4b5fd; padding: 9px 14px; border-radius: 50px;
+      font-size: 0.8rem; font-weight: 600; cursor: pointer; font-family: inherit;
+      transition: background .2s, color .2s;
+    }
+    .demo-btn-copy:hover { background: rgba(124,58,237,0.18); color: #fff; }
+    .demo-btn-copy.copied { background: linear-gradient(135deg,#22c55e,#16a34a); color: #fff; border-color: transparent; }
+    .demo-btn-view {
+      flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: linear-gradient(135deg,#ec4899,#7c3aed);
+      color: #fff; padding: 9px 14px; border-radius: 50px;
+      font-size: 0.8rem; font-weight: 700; cursor: pointer; font-family: inherit;
+      border: none; transition: opacity .2s;
+    }
+    .demo-btn-view:hover { opacity: 0.88; }
+
+    /* ─── DEMO MODAL ─── */
+    #demo-modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center; padding: 16px;
+    }
+    #demo-modal-overlay.open { display: flex; }
+    #demo-modal {
+      background: #100a2a; border: 1px solid rgba(124,58,237,0.45);
+      border-radius: 20px; width: 100%; max-width: 640px;
+      max-height: 90vh; overflow-y: auto; position: relative;
+    }
+    #demo-modal-close {
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(255,255,255,0.08); border: none; color: #fff;
+      width: 32px; height: 32px; border-radius: 50%; font-size: 1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .2s; z-index: 2;
+    }
+    #demo-modal-close:hover { background: rgba(255,255,255,0.15); }
+    #demo-modal-img { width: 100%; border-radius: 18px 18px 0 0; display: block; max-height: 320px; object-fit: cover; }
+    #demo-modal-img.hidden { display: none; }
+    #demo-modal-content { padding: 24px 28px 28px; }
+    #demo-modal-badge {
+      display: inline-block; padding: 4px 13px; border-radius: 50px;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase; margin-bottom: 14px;
+    }
+    #demo-modal-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.35rem; font-weight: 800; color: #fff;
+      margin-bottom: 16px; line-height: 1.3;
+    }
+    #demo-modal-prompt {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(124,58,237,0.25);
+      border-radius: 12px; padding: 16px 18px; font-size: 0.85rem;
+      color: rgba(255,255,255,0.8); line-height: 1.65;
+      white-space: pre-wrap; font-family: 'Inter', monospace;
+      margin-bottom: 20px; max-height: 240px; overflow-y: auto;
+    }
+    .demo-modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .demo-modal-copy {
+      flex: 1; min-width: 120px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(124,58,237,0.4);
+      color: #c4b5fd; padding: 12px 20px; border-radius: 50px;
+      font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit;
+      transition: background .2s;
+    }
+    .demo-modal-copy:hover { background: rgba(124,58,237,0.2); color: #fff; }
+    .demo-modal-copy.copied { background: linear-gradient(135deg,#22c55e,#16a34a); color: #fff; border-color: transparent; }
+    .demo-modal-try {
+      flex: 1; min-width: 120px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      background: linear-gradient(135deg,#ec4899,#7c3aed);
+      color: #fff; padding: 12px 20px; border-radius: 50px;
+      font-size: 0.88rem; font-weight: 700; cursor: pointer; font-family: inherit;
+      border: none; text-decoration: none; transition: opacity .2s;
+    }
+    .demo-modal-try:hover { opacity: 0.88; }
+    .demo-modal-upsell {
+      margin-top: 20px; padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      text-align: center;
+    }
+    .demo-modal-upsell p { font-size: 0.82rem; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+    .demo-modal-upsell a {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: linear-gradient(135deg,rgba(124,58,237,0.2),rgba(236,72,153,0.15));
+      border: 1px solid rgba(124,58,237,0.4); color: #c4b5fd;
+      padding: 9px 22px; border-radius: 50px; font-size: 0.82rem;
+      font-weight: 600; text-decoration: none; transition: background .2s;
+    }
+    .demo-modal-upsell a:hover { background: linear-gradient(135deg,#7c3aed,#ec4899); color: #fff; border-color: transparent; }
+
+    /* skeleton loader */
+    .demo-skeleton {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(124,58,237,0.15);
+      border-radius: 18px; height: 320px; animation: skeleton-pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes skeleton-pulse {
+      0%,100% { opacity: 0.5; } 50% { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .demo-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .demo-card-img { height: 140px; }
+      #demo-modal-content { padding: 18px 18px 22px; }
+      #demo-modal-title { font-size: 1.1rem; }
+    }
+    @media (max-width: 480px) {
+      .demo-grid { grid-template-columns: 1fr; }
     }
 
     /* ─── LIVE ACTIVITY TICKER ─── */
@@ -617,6 +731,7 @@
       .magic-badge { font-size: 0.68rem; padding: 5px 14px; }
       .nav-logo-img { height: 40px; }
       .nav-cta { font-size: 0.78rem; padding: 8px 16px; }
+      .nav-ghost-btn { display: none; }
 
       /* Hero */
       #hero { min-height: auto; padding: 56px 5% 48px; }
@@ -732,7 +847,10 @@
       <span class="magic-star">✦</span>
     </span>
   </div>
-  <a href="https://facebook.com/promptlyn" target="_blank" class="nav-cta" style="text-decoration:none;">Get Early Access →</a>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <a href="#demo-prompts" class="nav-ghost-btn" style="text-decoration:none;">Browse Prompts</a>
+    <a href="https://facebook.com/promptlyn" target="_blank" class="nav-cta" style="text-decoration:none;">Get Early Access →</a>
+  </div>
 </nav>
 
 <!-- ══════════════════════════════════════════════
@@ -821,6 +939,47 @@
   <div class="cat-grid" id="cat-grid"></div>
 </section>
 
+
+<!-- ══════════════════════════════════════════════
+     DEMO PROMPTS
+══════════════════════════════════════════════ -->
+<section id="demo-prompts">
+  <div class="section-label">Try It Free</div>
+  <h2 class="section-h2">Live <em>Demo Prompts</em></h2>
+  <p style="color:rgba(255,255,255,0.45);font-size:0.92rem;margin-top:-32px;margin-bottom:36px;max-width:560px;">
+    Hand-picked prompts from our library — copy any of them and paste directly into your favourite AI tool.
+  </p>
+  <div class="demo-grid" id="demo-grid">
+    <!-- 6 skeleton loaders while fetching -->
+    <div class="demo-skeleton"></div>
+    <div class="demo-skeleton"></div>
+    <div class="demo-skeleton"></div>
+    <div class="demo-skeleton"></div>
+    <div class="demo-skeleton"></div>
+    <div class="demo-skeleton"></div>
+  </div>
+</section>
+
+<!-- Demo prompt modal -->
+<div id="demo-modal-overlay" role="dialog" aria-modal="true">
+  <div id="demo-modal">
+    <button id="demo-modal-close" aria-label="Close">✕</button>
+    <img id="demo-modal-img" src="" alt="" />
+    <div id="demo-modal-content">
+      <div id="demo-modal-badge"></div>
+      <div id="demo-modal-title"></div>
+      <div id="demo-modal-prompt"></div>
+      <div class="demo-modal-actions">
+        <button class="demo-modal-copy" id="demo-modal-copy-btn">📋 Copy Prompt</button>
+        <a class="demo-modal-try" id="demo-modal-try-btn" href="https://chat.openai.com" target="_blank" rel="noreferrer">⚡ Try in ChatGPT</a>
+      </div>
+      <div class="demo-modal-upsell">
+        <p>Want 20,000+ more prompts like this?</p>
+        <a href="https://facebook.com/promptlyn" target="_blank" rel="noreferrer">✨ Get Early Access — It's Free →</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════════════
      CTA BANNER
@@ -1027,6 +1186,136 @@ categories.forEach(function(c) {
   catGrid.appendChild(card);
 });
 
+
+/* ── Demo Prompts (fetched from Supabase) ── */
+(function() {
+  var SUPABASE_URL = 'https://oodnyokwebvwtoxibnqs.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vZG55b2t3ZWJ2d3RveGlibnFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNzE5MTcsImV4cCI6MjA5Mjc0NzkxN30.NXnfXfsVZh7cx78HClINVIetNVfbyVdDCIYSN0v7Qrc';
+
+  var grid = document.getElementById('demo-grid');
+  var overlay = document.getElementById('demo-modal-overlay');
+  var modalImg = document.getElementById('demo-modal-img');
+  var modalBadge = document.getElementById('demo-modal-badge');
+  var modalTitle = document.getElementById('demo-modal-title');
+  var modalPrompt = document.getElementById('demo-modal-prompt');
+  var modalCopyBtn = document.getElementById('demo-modal-copy-btn');
+  var modalTryBtn = document.getElementById('demo-modal-try-btn');
+  var modalClose = document.getElementById('demo-modal-close');
+
+  var BADGE_COLORS = {
+    'ChatGPT': '#10a37f', 'Claude': '#cc785c', 'Grok': '#1d9bf0',
+    'Gemini': '#4285f4', 'Writing': '#ec4899', 'Marketing': '#f59e0b',
+    'Coding': '#6366f1', 'Design': '#8b5cf6', 'Business': '#10b981',
+  };
+
+  function badgeColor(cat) {
+    if (!cat) return '#7c3aed';
+    for (var key in BADGE_COLORS) {
+      if (cat.toLowerCase().indexOf(key.toLowerCase()) !== -1) return BADGE_COLORS[key];
+    }
+    return '#7c3aed';
+  }
+
+  function escHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function openModal(p) {
+    var color = badgeColor(p.category);
+    if (p.image_url) {
+      modalImg.src = p.image_url;
+      modalImg.alt = p.title || '';
+      modalImg.className = '';
+    } else {
+      modalImg.className = 'hidden';
+    }
+    modalBadge.textContent = p.category || 'Prompt';
+    modalBadge.style.background = color + '22';
+    modalBadge.style.color = color;
+    modalBadge.style.border = '1px solid ' + color + '44';
+    modalTitle.textContent = p.title || '';
+    modalPrompt.textContent = p.prompt || p.content || '';
+    modalCopyBtn.className = 'demo-modal-copy';
+    modalCopyBtn.textContent = '📋 Copy Prompt';
+    modalCopyBtn.onclick = function() {
+      navigator.clipboard.writeText(p.prompt || p.content || '').then(function() {
+        modalCopyBtn.textContent = '✅ Copied!';
+        modalCopyBtn.className = 'demo-modal-copy copied';
+        setTimeout(function() {
+          modalCopyBtn.textContent = '📋 Copy Prompt';
+          modalCopyBtn.className = 'demo-modal-copy';
+        }, 2000);
+      });
+    };
+    overlay.className = 'open';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    overlay.className = '';
+    document.body.style.overflow = '';
+  }
+
+  modalClose.addEventListener('click', closeModal);
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+  function renderCards(prompts) {
+    grid.innerHTML = '';
+    if (!prompts || !prompts.length) {
+      grid.innerHTML = '<p style="color:rgba(255,255,255,0.3);font-size:0.9rem;">No demo prompts available yet.</p>';
+      return;
+    }
+    prompts.forEach(function(p) {
+      var color = badgeColor(p.category);
+      var card = document.createElement('div');
+      card.className = 'demo-card';
+      var imgHtml = p.image_url
+        ? '<img class="demo-card-img" src="' + escHtml(p.image_url) + '" alt="' + escHtml(p.title) + '" loading="lazy" />'
+        : '<div class="demo-card-img-placeholder">✨</div>';
+      var preview = (p.prompt || p.content || '').slice(0, 120);
+      card.innerHTML =
+        imgHtml +
+        '<div class="demo-card-body">' +
+          '<span class="demo-card-badge" style="background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44">' + escHtml(p.category || 'Prompt') + '</span>' +
+          '<div class="demo-card-title">' + escHtml(p.title || 'Untitled') + '</div>' +
+          '<div class="demo-card-preview">' + escHtml(preview) + (preview.length < (p.prompt || p.content || '').length ? '…' : '') + '</div>' +
+          '<div class="demo-card-actions">' +
+            '<button class="demo-btn-copy">📋 Copy</button>' +
+            '<button class="demo-btn-view">👁 View</button>' +
+          '</div>' +
+        '</div>';
+      var copyBtn = card.querySelector('.demo-btn-copy');
+      var viewBtn = card.querySelector('.demo-btn-view');
+      copyBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        navigator.clipboard.writeText(p.prompt || p.content || '').then(function() {
+          copyBtn.textContent = '✅ Copied!';
+          copyBtn.className = 'demo-btn-copy copied';
+          setTimeout(function() {
+            copyBtn.textContent = '📋 Copy';
+            copyBtn.className = 'demo-btn-copy';
+          }, 2000);
+        });
+      });
+      viewBtn.addEventListener('click', function(e) { e.stopPropagation(); openModal(p); });
+      card.addEventListener('click', function() { openModal(p); });
+      grid.appendChild(card);
+    });
+  }
+
+  fetch(SUPABASE_URL + '/rest/v1/demo_prompts?select=*&order=sort_order.asc,id.asc&limit=12', {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+    }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) { renderCards(Array.isArray(data) ? data : []); })
+  .catch(function() {
+    grid.innerHTML = '<p style="color:rgba(255,255,255,0.3);font-size:0.9rem;">Could not load prompts right now.</p>';
+  });
+})();
 
 /* ── Live Ticker ── */
 var tickEvents = [
