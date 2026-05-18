@@ -534,6 +534,8 @@
       -webkit-text-fill-color: transparent; background-clip: text;
       font-size: 0.65rem;
     }
+    #magic-text { transition: opacity .3s; }
+    #rotating-tool { transition: opacity .3s; }
 
     /* ─── CURIOSITY STRIP ─── */
     .curiosity-strip {
@@ -899,67 +901,6 @@ categories.forEach(function(c) {
   catGrid.appendChild(card);
 });
 
-/* ── Featured Prompts ── */
-var prompts = [
-  { cat:'AI & ChatGPT',  catColor:'#7c3aed', catBg:'rgba(124,58,237,0.15)',
-    title:'Ultimate ChatGPT System Prompt',
-    preview:'Transform any ChatGPT session into a specialized expert. This prompt unlocks deep reasoning mode and forces structured, actionable responses every time.',
-    copied: false },
-  { cat:'Marketing',     catColor:'#ec4899', catBg:'rgba(236,72,153,0.15)',
-    title:'Viral Twitter/X Thread Generator',
-    preview:'Generate a 15-tweet thread that hooks readers in the first 3 words, builds tension, and closes with a CTA that actually converts. Battle-tested on 200k+ impressions.',
-    copied: false },
-  { cat:'Coding & Dev',  catColor:'#6366f1', catBg:'rgba(99,102,241,0.15)',
-    title:'Code Reviewer & Refactor Expert',
-    preview:'Paste any function and get: bug analysis, refactored version, performance notes, and test cases. Supports Python, JS, TypeScript, Go, and Rust.',
-    copied: false },
-  { cat:'Writing',       catColor:'#f59e0b', catBg:'rgba(245,158,11,0.15)',
-    title:'Blog Post Outline Master',
-    preview:'Creates a full SEO-optimized blog post outline with H2s, H3s, internal link suggestions, and a meta description — all tuned for your exact target keyword.',
-    copied: false },
-  { cat:'Business',      catColor:'#10b981', catBg:'rgba(16,185,129,0.15)',
-    title:'Startup Pitch Deck Storyteller',
-    preview:'Describe your startup in one sentence and get a complete 10-slide narrative arc — problem, solution, traction, market, ask — investor-ready language included.',
-    copied: false },
-  { cat:'Education',     catColor:'#3b82f6', catBg:'rgba(59,130,246,0.15)',
-    title:'Feynman Technique Explainer',
-    preview:'Give it any complex topic and get a crystal-clear explanation as if you\'re 12 years old, then gradually build to expert-level nuance. Perfect for studying.',
-    copied: false },
-];
-var promptGrid = document.getElementById('prompt-grid');
-var samplePromptTexts = [
-  'You are an expert assistant. For this session, apply chain-of-thought reasoning before every answer. Structure all responses with: [Analysis] → [Key Insight] → [Action Steps]. Be concise but complete.',
-  'Write a viral Twitter thread about [TOPIC]. Start with a bold, contrarian hook. 15 tweets. Each tweet builds on the last. End with a strong CTA. No filler. Make every tweet punchy.',
-  'Review this code for: 1) bugs 2) performance issues 3) security vulnerabilities 4) readability. Then provide a refactored version with inline comments explaining key changes.',
-  'Create a detailed blog post outline for: [KEYWORD]. Include: title tag, meta description, H2s, H3s, FAQ section, and internal link opportunities. Optimize for search intent.',
-  'You are a Y Combinator partner. Given this startup: [DESCRIPTION], craft a compelling 10-slide pitch deck narrative. Be brutally honest about weaknesses. Include the ask.',
-  'Explain [CONCEPT] using the Feynman Technique: start at a 5th-grade level, build complexity in 3 stages, use analogies, and end with a 3-question quiz to test understanding.',
-];
-prompts.forEach(function(p, i) {
-  var card = document.createElement('div');
-  card.className = 'prompt-card';
-  var btnId = 'copy-btn-' + i;
-  card.innerHTML =
-    '<span class="p-badge" style="background:' + p.catBg + ';color:' + p.catColor + ';border:1px solid ' + p.catColor + '33">' + p.cat + '</span>' +
-    '<div class="p-title">' + p.title + '</div>' +
-    '<div class="p-preview">' + p.preview + '</div>' +
-    '<button class="p-copy" id="' + btnId + '" data-idx="' + i + '">📋 Copy Prompt</button>';
-  promptGrid.appendChild(card);
-});
-document.getElementById('prompt-grid').addEventListener('click', function(e) {
-  var btn = e.target.closest('.p-copy');
-  if (!btn) return;
-  var idx = parseInt(btn.dataset.idx, 10);
-  var text = samplePromptTexts[idx];
-  navigator.clipboard.writeText(text).then(function() {
-    btn.textContent = '✓ Copied!';
-    btn.classList.add('copied');
-    setTimeout(function() {
-      btn.textContent = '📋 Copy Prompt';
-      btn.classList.remove('copied');
-    }, 2000);
-  });
-});
 
 /* ── Live Ticker ── */
 var tickEvents = [
