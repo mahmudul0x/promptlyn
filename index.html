@@ -113,12 +113,14 @@
     }
     .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
     .nav-ghost-btn {
-      background: transparent; border: 1.5px solid rgba(124,58,237,0.5);
-      color: #c4b5fd; padding: 8px 18px; border-radius: 50px;
-      font-size: 0.85rem; font-weight: 600;
-      transition: border-color .2s, color .2s, background .2s;
+      display: inline-flex; align-items: center; gap: 7px;
+      background: linear-gradient(135deg, #ec4899, #7c3aed);
+      color: #fff; padding: 9px 20px; border-radius: 50px;
+      font-size: 0.84rem; font-weight: 700; border: none;
+      box-shadow: 0 0 18px rgba(124,58,237,0.35);
+      transition: opacity .2s, transform .2s, box-shadow .2s;
     }
-    .nav-ghost-btn:hover { border-color: #7c3aed; background: rgba(124,58,237,0.12); color: #fff; }
+    .nav-ghost-btn:hover { opacity: .88; transform: translateY(-1px); box-shadow: 0 0 28px rgba(236,72,153,0.45); }
 
     /* ─── HERO ─── */
     #hero {
@@ -195,6 +197,50 @@
     .btn-ghost:hover {
       border-color: #7c3aed; background: rgba(124,58,237,0.12); color: #fff;
     }
+    /* ── HERO BROWSE BUTTON ── */
+    .btn-browse {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      position: relative;
+      background: linear-gradient(135deg, #ec4899 0%, #7c3aed 50%, #6366f1 100%);
+      color: #fff; border: none;
+      padding: 17px 40px; border-radius: 50px;
+      font-size: 1.05rem; font-weight: 800;
+      cursor: pointer; font-family: inherit; text-decoration: none;
+      box-shadow: 0 0 0 0 rgba(124,58,237,0.5),
+                  0 8px 32px rgba(124,58,237,0.45),
+                  inset 0 1px 0 rgba(255,255,255,0.15);
+      transition: transform .22s, box-shadow .22s;
+      letter-spacing: 0.01em;
+    }
+    .btn-browse::before {
+      content: '';
+      position: absolute; inset: -2px;
+      border-radius: 52px;
+      background: linear-gradient(135deg, #ec4899, #7c3aed, #6366f1);
+      z-index: -1; opacity: 0;
+      filter: blur(12px);
+      transition: opacity .3s;
+    }
+    .btn-browse:hover { transform: translateY(-3px); box-shadow: 0 0 0 4px rgba(124,58,237,.18), 0 16px 48px rgba(124,58,237,.55), inset 0 1px 0 rgba(255,255,255,.15); }
+    .btn-browse:hover::before { opacity: 1; }
+    .btn-browse:active { transform: translateY(-1px); }
+    .btn-browse-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      flex-shrink: 0; transition: transform .22s;
+    }
+    .btn-browse:hover .btn-browse-icon { transform: translateX(3px); }
+    /* secondary ghost link below */
+    .hero-sub-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.84rem; color: rgba(255,255,255,0.45);
+      text-decoration: none; font-weight: 500;
+      transition: color .2s;
+    }
+    .hero-sub-link:hover { color: rgba(255,255,255,0.8); }
+    .hero-sub-link svg { opacity: 0.5; transition: opacity .2s, transform .2s; }
+    .hero-sub-link:hover svg { opacity: 1; transform: translateX(2px); }
     .live-counter {
       display: inline-flex; align-items: center; gap: 10px;
       background: rgba(255,255,255,0.04); border: 1px solid rgba(34,197,94,0.3);
@@ -305,11 +351,48 @@
 
     /* ─── DEMO PROMPTS ─── */
     #demo-prompts { background: rgba(255,255,255,0.015); }
+
+    /* See All — top right pill */
+    .demo-see-all {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 22px; border-radius: 50px;
+      border: 1.5px solid rgba(124,58,237,0.4);
+      background: rgba(124,58,237,0.08);
+      color: #c4b5fd; font-size: 0.83rem; font-weight: 700;
+      text-decoration: none; white-space: nowrap;
+      transition: background .2s, border-color .2s, color .2s, box-shadow .2s;
+    }
+    .demo-see-all:hover {
+      background: rgba(124,58,237,0.18); border-color: #7c3aed;
+      color: #fff; box-shadow: 0 0 20px rgba(124,58,237,0.25);
+    }
+    .demo-see-all svg { transition: transform .2s; }
+    .demo-see-all:hover svg { transform: translateX(3px); }
+
+    /* See All — bottom full CTA */
+    .demo-see-all-bottom {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 32px; border-radius: 50px;
+      background: linear-gradient(135deg, #ec4899, #7c3aed);
+      color: #fff; font-size: 0.9rem; font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 4px 24px rgba(124,58,237,0.4);
+      transition: opacity .2s, transform .2s, box-shadow .2s;
+    }
+    .demo-see-all-bottom:hover {
+      opacity: .88; transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(124,58,237,0.5);
+    }
+    .demo-see-all-bottom svg:last-child { transition: transform .2s; }
+    .demo-see-all-bottom:hover svg:last-child { transform: translateX(3px); }
+
     .demo-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
     }
+    @media (max-width: 900px)  { .demo-grid { grid-template-columns: repeat(2, 1fr); gap: 13px; } }
+    @media (max-width: 500px)  { .demo-grid { grid-template-columns: 1fr; gap: 11px; } }
     .demo-card {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.08);
@@ -741,8 +824,9 @@
       .hero-sub { font-size: 0.92rem; margin-bottom: 28px; }
       .curiosity-strip { gap: 8px; margin-bottom: 24px; }
       .c-item { font-size: 0.75rem; }
-      .hero-btns { flex-direction: column; align-items: center; gap: 10px; margin-bottom: 32px; }
+      .hero-btns { flex-direction: column; align-items: center; gap: 10px; margin-bottom: 20px; }
       .btn-primary, .btn-ghost { width: 100%; max-width: 280px; text-align: center; padding: 14px 24px; font-size: 0.95rem; }
+      .btn-browse { width: 100%; max-width: 300px; padding: 15px 28px; font-size: 0.97rem; }
       .live-counter { font-size: 0.82rem; padding: 9px 18px; flex-wrap: wrap; justify-content: center; gap: 7px; }
 
       /* Stats */
@@ -847,10 +931,10 @@
       <span class="magic-star">✦</span>
     </span>
   </div>
-  <div style="display:flex;align-items:center;gap:10px;">
-    <a href="prompts.html" class="nav-ghost-btn" style="text-decoration:none;">Browse Prompts</a>
-    <a href="https://facebook.com/promptlyn" target="_blank" class="nav-cta" style="text-decoration:none;">Get Early Access →</a>
-  </div>
+  <a href="prompts.html" class="nav-ghost-btn" style="text-decoration:none;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    Browse Prompts
+  </a>
 </nav>
 
 <!-- ══════════════════════════════════════════════
@@ -882,9 +966,19 @@
   </div>
 
   <div class="hero-btns">
-    <button class="btn-ghost" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})">
-      Browse Categories
-    </button>
+    <a href="prompts.html" class="btn-browse">
+      <span>Browse All Prompts</span>
+      <span class="btn-browse-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </a>
+  </div>
+  <div style="margin-bottom:48px;position:relative;">
+    <a href="#categories" class="hero-sub-link">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      or browse by category
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
   </div>
 
   <div class="live-counter">
@@ -944,13 +1038,22 @@
      DEMO PROMPTS
 ══════════════════════════════════════════════ -->
 <section id="demo-prompts">
-  <div class="section-label">Try It Free</div>
-  <h2 class="section-h2">Live <em>Demo Prompts</em></h2>
-  <p style="color:rgba(255,255,255,0.45);font-size:0.92rem;margin-top:-32px;margin-bottom:36px;max-width:560px;">
-    Hand-picked prompts from our library — copy any of them and paste directly into your favourite AI tool.
-  </p>
+  <!-- header row -->
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:36px;">
+    <div>
+      <div class="section-label" style="margin-bottom:10px;">Try It Free</div>
+      <h2 class="section-h2" style="margin-bottom:10px;">Live <em>Demo Prompts</em></h2>
+      <p style="color:rgba(255,255,255,0.42);font-size:0.88rem;max-width:480px;line-height:1.6;">
+        Hand-picked prompts — copy &amp; paste into any AI tool instantly.
+      </p>
+    </div>
+    <a href="prompts.html" class="demo-see-all">
+      Browse All Prompts
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+
   <div class="demo-grid" id="demo-grid">
-    <!-- 6 skeleton loaders while fetching -->
     <div class="demo-skeleton"></div>
     <div class="demo-skeleton"></div>
     <div class="demo-skeleton"></div>
@@ -958,20 +1061,29 @@
     <div class="demo-skeleton"></div>
     <div class="demo-skeleton"></div>
   </div>
+
+  <!-- bottom see all -->
+  <div style="text-align:center;margin-top:44px;">
+    <a href="prompts.html" class="demo-see-all-bottom">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      See All Prompts in Library
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
 </section>
 
-<!-- Demo prompt modal -->
-<div id="demo-modal-overlay" role="dialog" aria-modal="true">
+<!-- REMOVED: demo modal replaced by prompts.html lightbox -->
+<div id="demo-modal-overlay" style="display:none!important;">
   <div id="demo-modal">
-    <button id="demo-modal-close" aria-label="Close">✕</button>
+    <button id="demo-modal-close">✕</button>
     <img id="demo-modal-img" src="" alt="" />
     <div id="demo-modal-content">
       <div id="demo-modal-badge"></div>
       <div id="demo-modal-title"></div>
       <div id="demo-modal-prompt"></div>
       <div class="demo-modal-actions">
-        <button class="demo-modal-copy" id="demo-modal-copy-btn">📋 Copy Prompt</button>
-        <a class="demo-modal-try" id="demo-modal-try-btn" href="https://chat.openai.com" target="_blank" rel="noreferrer">⚡ Try in ChatGPT</a>
+        <button class="demo-modal-copy" id="demo-modal-copy-btn"></button>
+        <a class="demo-modal-try" id="demo-modal-try-btn" href="#"></a>
       </div>
       <div class="demo-modal-upsell">
         <p>Want 20,000+ more prompts like this?</p>
@@ -1193,127 +1305,71 @@ categories.forEach(function(c) {
   var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vZG55b2t3ZWJ2d3RveGlibnFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNzE5MTcsImV4cCI6MjA5Mjc0NzkxN30.NXnfXfsVZh7cx78HClINVIetNVfbyVdDCIYSN0v7Qrc';
 
   var grid = document.getElementById('demo-grid');
-  var overlay = document.getElementById('demo-modal-overlay');
-  var modalImg = document.getElementById('demo-modal-img');
-  var modalBadge = document.getElementById('demo-modal-badge');
-  var modalTitle = document.getElementById('demo-modal-title');
-  var modalPrompt = document.getElementById('demo-modal-prompt');
-  var modalCopyBtn = document.getElementById('demo-modal-copy-btn');
-  var modalTryBtn = document.getElementById('demo-modal-try-btn');
-  var modalClose = document.getElementById('demo-modal-close');
 
   var BADGE_COLORS = {
-    'ChatGPT': '#10a37f', 'Claude': '#cc785c', 'Grok': '#1d9bf0',
-    'Gemini': '#4285f4', 'Writing': '#ec4899', 'Marketing': '#f59e0b',
-    'Coding': '#6366f1', 'Design': '#8b5cf6', 'Business': '#10b981',
+    'ChatGPT':'#10a37f','Claude':'#cc785c','Grok':'#1d9bf0',
+    'Gemini':'#4285f4','Writing':'#ec4899','Marketing':'#f59e0b',
+    'Coding':'#6366f1','Design':'#8b5cf6','Business':'#10b981',
   };
-
   function badgeColor(cat) {
     if (!cat) return '#7c3aed';
-    for (var key in BADGE_COLORS) {
-      if (cat.toLowerCase().indexOf(key.toLowerCase()) !== -1) return BADGE_COLORS[key];
-    }
+    for (var k in BADGE_COLORS) if (cat.toLowerCase().indexOf(k.toLowerCase()) !== -1) return BADGE_COLORS[k];
     return '#7c3aed';
   }
-
-  function escHtml(str) {
-    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  function openModal(p) {
-    var color = badgeColor(p.category);
-    if (p.image_url) {
-      modalImg.src = p.image_url;
-      modalImg.alt = p.title || '';
-      modalImg.className = '';
-    } else {
-      modalImg.className = 'hidden';
-    }
-    modalBadge.textContent = p.category || 'Prompt';
-    modalBadge.style.background = color + '22';
-    modalBadge.style.color = color;
-    modalBadge.style.border = '1px solid ' + color + '44';
-    modalTitle.textContent = p.title || '';
-    modalPrompt.textContent = p.prompt || p.content || '';
-    modalCopyBtn.className = 'demo-modal-copy';
-    modalCopyBtn.textContent = '📋 Copy Prompt';
-    modalCopyBtn.onclick = function() {
-      navigator.clipboard.writeText(p.prompt || p.content || '').then(function() {
-        modalCopyBtn.textContent = '✅ Copied!';
-        modalCopyBtn.className = 'demo-modal-copy copied';
-        setTimeout(function() {
-          modalCopyBtn.textContent = '📋 Copy Prompt';
-          modalCopyBtn.className = 'demo-modal-copy';
-        }, 2000);
-      });
-    };
-    overlay.className = 'open';
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal() {
-    overlay.className = '';
-    document.body.style.overflow = '';
-  }
-
-  modalClose.addEventListener('click', closeModal);
-  overlay.addEventListener('click', function(e) { if (e.target === overlay) closeModal(); });
-  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
   function renderCards(prompts) {
     grid.innerHTML = '';
     if (!prompts || !prompts.length) {
-      grid.innerHTML = '<p style="color:rgba(255,255,255,0.3);font-size:0.9rem;">No demo prompts available yet.</p>';
+      grid.innerHTML = '<p style="color:rgba(255,255,255,0.3);font-size:0.9rem;grid-column:1/-1;">No demo prompts available yet.</p>';
       return;
     }
-    prompts.forEach(function(p) {
+    prompts.slice(0, 6).forEach(function(p) {
       var color = badgeColor(p.category);
       var card = document.createElement('div');
       card.className = 'demo-card';
       var imgHtml = p.image_url
-        ? '<img class="demo-card-img" src="' + escHtml(p.image_url) + '" alt="' + escHtml(p.title) + '" loading="lazy" />'
+        ? '<img class="demo-card-img" src="'+esc(p.image_url)+'" alt="'+esc(p.title)+'" loading="lazy" />'
         : '<div class="demo-card-img-placeholder">✨</div>';
-      var preview = (p.prompt || p.content || '').slice(0, 120);
+      var text = p.prompt || p.content || '';
+      var preview = text.slice(0, 100) + (text.length > 100 ? '…' : '');
       card.innerHTML =
         imgHtml +
         '<div class="demo-card-body">' +
-          '<span class="demo-card-badge" style="background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44">' + escHtml(p.category || 'Prompt') + '</span>' +
-          '<div class="demo-card-title">' + escHtml(p.title || 'Untitled') + '</div>' +
-          '<div class="demo-card-preview">' + escHtml(preview) + (preview.length < (p.prompt || p.content || '').length ? '…' : '') + '</div>' +
+          '<span class="demo-card-badge" style="background:'+color+'22;color:'+color+';border:1px solid '+color+'44">'+esc(p.category||'Prompt')+'</span>' +
+          '<div class="demo-card-title">'+esc(p.title||'Untitled')+'</div>' +
+          '<div class="demo-card-preview">'+esc(preview)+'</div>' +
           '<div class="demo-card-actions">' +
             '<button class="demo-btn-copy">📋 Copy</button>' +
-            '<button class="demo-btn-view">👁 View</button>' +
+            '<a class="demo-btn-view" href="prompts.html">View All →</a>' +
           '</div>' +
         '</div>';
+
       var copyBtn = card.querySelector('.demo-btn-copy');
-      var viewBtn = card.querySelector('.demo-btn-view');
       copyBtn.addEventListener('click', function(e) {
         e.stopPropagation();
-        navigator.clipboard.writeText(p.prompt || p.content || '').then(function() {
+        navigator.clipboard.writeText(text).then(function() {
           copyBtn.textContent = '✅ Copied!';
           copyBtn.className = 'demo-btn-copy copied';
-          setTimeout(function() {
-            copyBtn.textContent = '📋 Copy';
-            copyBtn.className = 'demo-btn-copy';
-          }, 2000);
+          setTimeout(function() { copyBtn.textContent='📋 Copy'; copyBtn.className='demo-btn-copy'; }, 2000);
         });
       });
-      viewBtn.addEventListener('click', function(e) { e.stopPropagation(); openModal(p); });
-      card.addEventListener('click', function() { openModal(p); });
+      /* card click → prompts.html */
+      card.addEventListener('click', function(e) {
+        if (e.target === copyBtn || copyBtn.contains(e.target)) return;
+        window.location.href = 'prompts.html';
+      });
       grid.appendChild(card);
     });
   }
 
-  fetch(SUPABASE_URL + '/rest/v1/demo_prompts?select=*&order=sort_order.asc,id.asc&limit=12', {
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': 'Bearer ' + SUPABASE_KEY,
-    }
+  fetch(SUPABASE_URL + '/rest/v1/demo_prompts?select=*&order=sort_order.asc,id.asc&limit=6', {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
   })
   .then(function(r) { return r.json(); })
   .then(function(data) { renderCards(Array.isArray(data) ? data : []); })
   .catch(function() {
-    grid.innerHTML = '<p style="color:rgba(255,255,255,0.3);font-size:0.9rem;">Could not load prompts right now.</p>';
+    grid.innerHTML = '<p style="color:rgba(255,255,255,0.3);font-size:0.9rem;grid-column:1/-1;">Could not load prompts right now.</p>';
   });
 })();
 

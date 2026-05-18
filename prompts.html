@@ -201,13 +201,19 @@
 
     /* ── LOAD MORE ── */
     .load-more-wrap { text-align:center; padding:0 5% 80px; }
+    .load-more-inner { display:inline-flex; flex-direction:column; align-items:center; gap:10px; }
+    .load-more-sub { font-size:.74rem; color:rgba(255,255,255,.28); }
     .btn-load-more {
-      background:transparent; border:1.5px solid rgba(124,58,237,.4);
-      color:#c4b5fd; padding:12px 36px; border-radius:50px;
-      font-size:.87rem; font-weight:600; cursor:pointer; font-family:inherit; transition:all .2s;
+      display:inline-flex; align-items:center; gap:8px;
+      background:rgba(124,58,237,.1); border:1.5px solid rgba(124,58,237,.4);
+      color:#c4b5fd; padding:13px 36px; border-radius:50px;
+      font-size:.88rem; font-weight:600; cursor:pointer; font-family:inherit;
+      transition:all .22s;
     }
-    .btn-load-more:hover { border-color:#7c3aed; background:rgba(124,58,237,.1); color:#fff; }
-    .btn-load-more:disabled { opacity:.3; cursor:not-allowed; }
+    .btn-load-more:hover { border-color:#7c3aed; background:rgba(124,58,237,.2); color:#fff; box-shadow:0 0 24px rgba(124,58,237,.2); }
+    .btn-load-more:disabled { opacity:.3; cursor:not-allowed; box-shadow:none; }
+    .btn-load-more svg { transition:transform .3s; }
+    .btn-load-more:hover svg { transform:translateY(2px); }
 
     /* ══════════════════════════════════════
        LIGHTBOX OVERLAY (full-screen)
@@ -518,7 +524,13 @@
 
 <!-- ── LOAD MORE ── -->
 <div class="load-more-wrap" id="load-more-wrap" style="display:none;">
-  <button class="btn-load-more" id="load-more-btn">Load More Prompts</button>
+  <div class="load-more-inner">
+    <button class="btn-load-more" id="load-more-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      Load More
+    </button>
+    <span class="load-more-sub" id="load-more-sub"></span>
+  </div>
 </div>
 
 <!-- ── FOOTER ── -->
@@ -642,7 +654,7 @@
   var SUPABASE_URL = 'https://oodnyokwebvwtoxibnqs.supabase.co';
   var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vZG55b2t3ZWJ2d3RveGlibnFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNzE5MTcsImV4cCI6MjA5Mjc0NzkxN30.NXnfXfsVZh7cx78HClINVIetNVfbyVdDCIYSN0v7Qrc';
 
-  var PAGE_SIZE = 18;
+  var PAGE_SIZE = 24;
   var allPrompts = [], filtered = [], displayed = 0;
   var activeCategory = 'all', searchQuery = '', sortMode = 'default';
   var lbIndex = -1;       // index in filtered[]
@@ -978,7 +990,14 @@
     }
     batch.forEach(function (p, i) { grid.appendChild(makeCard(p, displayed + i)); });
     displayed += batch.length;
-    loadMoreWrap.style.display = displayed < filtered.length ? 'block' : 'none';
+    var remaining = filtered.length - displayed;
+    if (remaining > 0) {
+      loadMoreWrap.style.display = 'block';
+      var sub = document.getElementById('load-more-sub');
+      if (sub) sub.textContent = remaining + ' more prompt' + (remaining !== 1 ? 's' : '') + ' remaining';
+    } else {
+      loadMoreWrap.style.display = 'none';
+    }
   }
 
   function updateMeta() {
