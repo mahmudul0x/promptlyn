@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Promptlyn — Real Prompts. Better Results.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #050010;
+      --violet:  #7c3aed;
+      --pink:    #ec4899;
+      --indigo:  #6366f1;
+      --white:   #ffffff;
+      --glass-bg: rgba(255,255,255,0.03);
+      --glass-border: rgba(124,58,237,0.35);
+      --grad: linear-gradient(135deg, #ec4899, #7c3aed, #6366f1);
+      --grad-h:  linear-gradient(90deg,  #ec4899, #7c3aed);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0020; }
+    ::-webkit-scrollbar-thumb { background: var(--violet); border-radius: 3px; }
+
+    /* ─── ANNOUNCEMENT BAR ─── */
+    #announce-bar {
+      background: linear-gradient(90deg, #ec4899 0%, #7c3aed 50%, #6366f1 100%);
+      padding: 10px 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      position: relative;
+      z-index: 1000;
+      animation: shimmer-bar 4s infinite;
+    }
+    @keyframes shimmer-bar {
+      0%,100% { filter: brightness(1); }
+      50%      { filter: brightness(1.15); }
+    }
+    #announce-bar span { opacity: 0.95; }
+    #dismiss-bar {
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: #fff; font-size: 1.1rem;
+      cursor: pointer; opacity: 0.8; line-height: 1;
+    }
+    #dismiss-bar:hover { opacity: 1; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: sticky; top: 0; z-index: 999;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      background: linear-gradient(90deg, rgba(20,6,45,0.96) 0%, rgba(30,8,55,0.96) 50%, rgba(20,6,45,0.96) 100%);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(124,58,237,0.45);
+      box-shadow: 0 1px 32px rgba(124,58,237,0.15);
+    }
+    .nav-logo {
+      display: flex; align-items: center; text-decoration: none;
+    }
+    .nav-logo-img {
+      height: 52px; width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(236,72,153,0.35));
+      transition: filter .3s;
+    }
+    .nav-logo:hover .nav-logo-img {
+      filter: drop-shadow(0 0 14px rgba(236,72,153,0.65));
+    }
+    .footer-logo-img {
+      height: 44px; width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(124,58,237,0.4));
+      margin-bottom: 14px;
+      display: block;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.65); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500; transition: color .2s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta {
+      background: var(--grad); color: #fff; border: none;
+      padding: 9px 22px; border-radius: 50px; font-size: 0.85rem;
+      font-weight: 700; cursor: pointer; font-family: inherit;
+      transition: opacity .2s, transform .2s;
+    }
+    .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative; overflow: hidden;
+      min-height: 92vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 80px 5% 60px;
+    }
+    .hero-glow {
+      position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 700px; pointer-events: none;
+      background: radial-gradient(ellipse at center, rgba(124,58,237,0.45) 0%, rgba(236,72,153,0.22) 40%, transparent 70%);
+      filter: blur(40px);
+      animation: pulse-glow 5s ease-in-out infinite;
+    }
+    @keyframes pulse-glow {
+      0%,100% { opacity: 0.85; transform: translateX(-50%) scale(1); }
+      50%      { opacity: 1;    transform: translateX(-50%) scale(1.06); }
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.4);
+      border-radius: 50px; padding: 6px 16px; font-size: 0.78rem;
+      font-weight: 600; color: #c4b5fd; letter-spacing: 0.05em;
+      text-transform: uppercase; margin-bottom: 28px; position: relative;
+    }
+    .blink-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: #22c55e;
+      animation: blink 1.4s infinite;
+    }
+    @keyframes blink {
+      0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,0.6); }
+      50%      { opacity: 0.6; box-shadow: 0 0 0 5px rgba(34,197,94,0); }
+    }
+    .hero-h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 900; line-height: 1.08; letter-spacing: -0.03em;
+      position: relative; margin-bottom: 24px;
+    }
+    .hero-h1 .line1 { color: #fff; display: block; }
+    .hero-h1 .line2 {
+      display: block;
+      background: linear-gradient(90deg, #ec4899, #a855f7, #6366f1);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      max-width: 560px; font-size: 1.05rem; color: rgba(255,255,255,0.6);
+      line-height: 1.65; margin-bottom: 40px; position: relative;
+    }
+    .hero-btns {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      justify-content: center; margin-bottom: 48px; position: relative;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #ec4899, #7c3aed);
+      color: #fff; border: none; padding: 15px 34px;
+      border-radius: 50px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      box-shadow: 0 0 30px rgba(124,58,237,0.5);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 50px rgba(236,72,153,0.6);
+    }
+    .btn-ghost {
+      background: transparent; border: 1.5px solid rgba(124,58,237,0.55);
+      color: #c4b5fd; padding: 15px 34px; border-radius: 50px;
+      font-size: 1rem; font-weight: 600; cursor: pointer; font-family: inherit;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .btn-ghost:hover {
+      border-color: #7c3aed; background: rgba(124,58,237,0.12); color: #fff;
+    }
+    .live-counter {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(34,197,94,0.3);
+      border-radius: 50px; padding: 10px 22px; font-size: 0.9rem;
+      font-weight: 600; color: rgba(255,255,255,0.85); position: relative;
+    }
+    .live-counter .pulse {
+      width: 9px; height: 9px; border-radius: 50%; background: #22c55e;
+      flex-shrink: 0; animation: blink 1.2s infinite;
+    }
+    #counter-num {
+      background: linear-gradient(90deg, #22c55e, #4ade80);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; font-weight: 800; font-size: 1rem;
+    }
+
+    /* ─── STATS STRIP ─── */
+    #stats {
+      background: rgba(255,255,255,0.025);
+      border-top: 1px solid rgba(124,58,237,0.25);
+      border-bottom: 1px solid rgba(124,58,237,0.25);
+      padding: 28px 5%;
+    }
+    .stats-inner {
+      display: flex; align-items: center; justify-content: center;
+      flex-wrap: wrap; gap: 0;
+    }
+    .stat-item {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 0 40px; position: relative;
+    }
+    .stat-item + .stat-item::before {
+      content: ''; position: absolute; left: 0; top: 10%;
+      height: 80%; width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(124,58,237,0.7), transparent);
+    }
+    .stat-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.9rem; font-weight: 800;
+      background: var(--grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.78rem; color: rgba(255,255,255,0.5);
+      font-weight: 500; margin-top: 4px; letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ─── SECTION COMMONS ─── */
+    section { padding: 90px 5%; }
+    .section-label {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #a78bfa;
+      margin-bottom: 12px;
+    }
+    .section-h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800; letter-spacing: -0.02em; margin-bottom: 48px;
+    }
+    .section-h2 em {
+      font-style: normal;
+      background: var(--grad-h); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ─── CATEGORIES ─── */
+    #categories { background: transparent; }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
+    }
+    .cat-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(124,58,237,0.25);
+      border-radius: 16px; padding: 24px 20px;
+      cursor: pointer; transition: transform .25s, box-shadow .25s, border-color .25s;
+      position: relative; overflow: hidden;
+    }
+    .cat-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(124,58,237,0.12) 0%, transparent 70%);
+      opacity: 0; transition: opacity .3s;
+    }
+    .cat-card:hover { transform: translateY(-6px); border-color: rgba(124,58,237,0.7); }
+    .cat-card:hover { box-shadow: 0 16px 50px rgba(124,58,237,0.3); }
+    .cat-card:hover::before { opacity: 1; }
+    .cat-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 14px;
+    }
+    .cat-name {
+      font-weight: 700; font-size: 0.95rem; margin-bottom: 6px;
+      color: rgba(255,255,255,0.92);
+    }
+    .cat-count {
+      font-size: 0.78rem; color: rgba(255,255,255,0.4);
+    }
+    .cat-badge {
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.4);
+      color: #c4b5fd; font-size: 0.68rem; font-weight: 700;
+      padding: 3px 9px; border-radius: 50px; letter-spacing: 0.03em;
+    }
+
+    /* ─── FEATURED PROMPTS ─── */
+    #featured { background: rgba(255,255,255,0.015); }
+    .prompt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .prompt-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-left: 3px solid transparent;
+      border-image: linear-gradient(180deg, #ec4899, #7c3aed) 1;
+      border-radius: 14px; padding: 22px;
+      transition: transform .2s, box-shadow .2s;
+      display: flex; flex-direction: column;
+    }
+    .prompt-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(236,72,153,0.15);
+    }
+    .p-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 50px;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em;
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    .p-title {
+      font-weight: 700; font-size: 1rem; margin-bottom: 8px;
+      color: rgba(255,255,255,0.93); line-height: 1.4;
+    }
+    .p-preview {
+      font-size: 0.83rem; color: rgba(255,255,255,0.45);
+      line-height: 1.55; flex: 1; margin-bottom: 18px;
+    }
+    .p-copy {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: linear-gradient(135deg, rgba(236,72,153,0.15), rgba(124,58,237,0.15));
+      border: 1px solid rgba(124,58,237,0.4);
+      color: #c4b5fd; padding: 9px 18px; border-radius: 50px;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      font-family: inherit; transition: background .2s, color .2s;
+      width: fit-content;
+    }
+    .p-copy:hover {
+      background: linear-gradient(135deg, #ec4899, #7c3aed);
+      color: #fff; border-color: transparent;
+    }
+    .p-copy.copied {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #fff; border-color: transparent;
+    }
+
+    /* ─── LIVE ACTIVITY TICKER ─── */
+    #activity {
+      padding: 0;
+      overflow: hidden;
+      border-top: 1px solid rgba(124,58,237,0.2);
+      border-bottom: 1px solid rgba(124,58,237,0.2);
+      background: rgba(124,58,237,0.06);
+    }
+    .ticker-wrap {
+      display: flex; align-items: center;
+      height: 52px; overflow: hidden; position: relative;
+    }
+    .ticker-label {
+      flex-shrink: 0; background: linear-gradient(135deg, #ec4899, #7c3aed);
+      color: #fff; font-size: 0.72rem; font-weight: 800;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0 20px; height: 100%; display: flex; align-items: center;
+      white-space: nowrap; z-index: 2;
+    }
+    .ticker-track {
+      display: flex; animation: ticker-scroll 40s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .tick-item {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 0 32px; font-size: 0.82rem; color: rgba(255,255,255,0.65);
+      white-space: nowrap;
+    }
+    .tick-item .dot {
+      color: #a78bfa; font-size: 0.6rem;
+    }
+    .tick-item strong { color: rgba(255,255,255,0.88); font-weight: 600; }
+    .tick-item .time { color: rgba(255,255,255,0.35); font-size: 0.75rem; }
+
+    /* ─── WHY PROMPTLYN ─── */
+    #why { background: transparent; }
+    .why-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .why-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px; padding: 32px 28px;
+      position: relative; overflow: hidden;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .why-card:hover {
+      border-color: rgba(236,72,153,0.5);
+      box-shadow: 0 0 40px rgba(124,58,237,0.2);
+    }
+    .why-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 18px;
+      background: rgba(124,58,237,0.15);
+      border: 1px solid rgba(124,58,237,0.3);
+    }
+    .why-title {
+      font-weight: 800; font-size: 1.05rem; margin-bottom: 10px;
+      color: #fff;
+    }
+    .why-desc {
+      font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.6;
+    }
+
+    /* ─── CTA BANNER ─── */
+    #cta-banner {
+      margin: 0 5% 80px;
+      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(236,72,153,0.15));
+      border: 1px solid rgba(124,58,237,0.35);
+      border-radius: 24px; padding: 60px 5%;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    #cta-banner::before {
+      content: ''; position: absolute;
+      top: -80px; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 300px;
+      background: radial-gradient(ellipse, rgba(124,58,237,0.3), transparent 70%);
+      pointer-events: none;
+    }
+    .cta-h {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800;
+      margin-bottom: 14px;
+    }
+    .cta-h em {
+      font-style: normal;
+      background: var(--grad-h); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .cta-sub { color: rgba(255,255,255,0.55); margin-bottom: 30px; font-size: 0.95rem; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: rgba(255,255,255,0.02);
+      border-top: 1px solid rgba(124,58,237,0.2);
+      padding: 52px 5% 32px;
+    }
+    .footer-top {
+      display: flex; flex-wrap: wrap; gap: 40px;
+      justify-content: space-between; margin-bottom: 48px;
+    }
+    .footer-brand { max-width: 280px; }
+    .footer-logo {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    }
+    .footer-logo svg { width: 34px; height: 34px; }
+    .footer-tagline {
+      font-size: 0.85rem; color: rgba(255,255,255,0.4); line-height: 1.6;
+    }
+    .footer-links { display: flex; gap: 48px; flex-wrap: wrap; }
+    .footer-col h4 {
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+      margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a {
+      font-size: 0.88rem; color: rgba(255,255,255,0.55);
+      text-decoration: none; transition: color .2s;
+    }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+      border-top: 1px solid rgba(255,255,255,0.06); padding-top: 24px;
+    }
+    .footer-copy { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+    .social-icons { display: flex; gap: 12px; }
+    .social-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid rgba(124,58,237,0.35);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.5); font-size: 0.9rem;
+      text-decoration: none; transition: border-color .2s, color .2s, box-shadow .2s;
+    }
+    .social-icon:hover {
+      border-color: #ec4899; color: #fff;
+      box-shadow: 0 0 16px rgba(236,72,153,0.4);
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9998;
+      opacity: 0.018;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ─── PARTICLE DOTS ─── */
+    .particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .particle {
+      position: absolute; border-radius: 50%;
+      background: rgba(124,58,237,0.6);
+      animation: float-up linear infinite;
+    }
+    @keyframes float-up {
+      0%   { transform: translateY(0) scale(1); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(-120vh) scale(0.4); opacity: 0; }
+    }
+
+    /* ─── NAV CENTER BADGE ─── */
+    .nav-center-badge {
+      position: absolute; left: 50%; transform: translateX(-50%);
+    }
+    .magic-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(124,58,237,0.12);
+      border: 1px solid rgba(124,58,237,0.4);
+      border-radius: 50px; padding: 6px 18px;
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em;
+      color: #c4b5fd; text-transform: uppercase; white-space: nowrap;
+      animation: badge-pulse 3s ease-in-out infinite;
+    }
+    @keyframes badge-pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(124,58,237,0.3); }
+      50%      { box-shadow: 0 0 0 6px rgba(124,58,237,0); }
+    }
+    .magic-star {
+      background: var(--grad-h); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+      font-size: 0.65rem;
+    }
+
+    /* ─── CURIOSITY STRIP ─── */
+    .curiosity-strip {
+      display: flex; align-items: center; gap: 14px;
+      flex-wrap: wrap; justify-content: center;
+      margin-bottom: 32px; position: relative;
+    }
+    .c-item {
+      font-size: 0.83rem; color: rgba(255,255,255,0.6); font-weight: 500;
+    }
+    .c-sep { color: rgba(124,58,237,0.5); font-size: 1rem; }
+
+    /* ─── ROTATING TOOL TEXT ─── */
+    #rotating-tool {
+      background: var(--grad-h); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+      font-weight: 700;
+      display: inline-block;
+      transition: opacity .3s;
+    }
+
+    /* ─── UTILITY ─── */
+    .text-center { text-align: center; }
+    .gradient-text {
+      background: var(--grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .stat-item { padding: 0 20px; }
+      .stat-num { font-size: 1.4rem; }
+      .footer-top { flex-direction: column; }
+      .footer-links { gap: 28px; }
+      section { padding: 64px 5%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     ANNOUNCEMENT BAR
+══════════════════════════════════════════════ -->
+<div id="announce-bar">
+  <span>✨ Something magical is almost here — <strong>Promptlyn is launching very soon.</strong> Bookmark &amp; be first. 🚀</span>
+  <button id="dismiss-bar" aria-label="Dismiss">✕</button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════════════ -->
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="image/logo.png" alt="Promptlyn" class="nav-logo-img" />
+  </a>
+  <div class="nav-center-badge">
+    <span class="magic-badge">
+      <span class="magic-star">✦</span>
+      <span id="magic-text">Launching Soon</span>
+      <span class="magic-star">✦</span>
+    </span>
+  </div>
+  <button class="nav-cta">Get Early Access →</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="hero-eyebrow">
+    <span class="blink-dot"></span>
+    🔥 Something big is coming — spread the word
+  </div>
+
+  <h1 class="hero-h1">
+    <span class="line1">Real Prompts.</span>
+    <span class="line2">Better Results.</span>
+  </h1>
+
+  <p class="hero-sub">
+    The internet's most magical AI prompt library is almost ready.<br>
+    20,000+ prompts for <span id="rotating-tool">ChatGPT</span> — free, instant, no login ever.
+  </p>
+
+  <div class="curiosity-strip">
+    <span class="c-item">🤫 Early users get exclusive perks</span>
+    <span class="c-sep">·</span>
+    <span class="c-item">⚡ 100% free, forever</span>
+    <span class="c-sep">·</span>
+    <span class="c-item">✨ New prompts drop daily</span>
+  </div>
+
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})">
+      ✦ Explore Prompts →
+    </button>
+    <button class="btn-ghost" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})">
+      Browse Categories
+    </button>
+  </div>
+
+  <div class="live-counter">
+    <span class="pulse"></span>
+    <span id="counter-num">20,847</span>
+    <span style="color:rgba(255,255,255,0.55);">Prompts and counting...</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     STATS STRIP
+══════════════════════════════════════════════ -->
+<div id="stats">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-num" data-target="20000" data-suffix="+" data-prefix="">20,000+</div>
+      <div class="stat-label">Prompts</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" data-target="50" data-suffix="+" data-prefix="">50+</div>
+      <div class="stat-label">Categories</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" data-target="100" data-suffix="%" data-prefix="">100%</div>
+      <div class="stat-label">Free</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">Daily</div>
+      <div class="stat-label">Updated</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     LIVE ACTIVITY TICKER
+══════════════════════════════════════════════ -->
+<div id="activity">
+  <div class="ticker-wrap">
+    <div class="ticker-label">⚡ Live Activity</div>
+    <div class="ticker-track" id="ticker-track">
+      <!-- Items injected by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     CATEGORIES
+══════════════════════════════════════════════ -->
+<section id="categories">
+  <div class="section-label">Discover</div>
+  <h2 class="section-h2">Browse by <em>Category</em></h2>
+  <div class="cat-grid" id="cat-grid"></div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     CTA BANNER
+══════════════════════════════════════════════ -->
+<div id="cta-banner">
+  <h2 class="cta-h">Ready to get <em>better results</em> with AI?</h2>
+  <p class="cta-sub">Join thousands of creators, marketers, and developers using Promptlyn every day.</p>
+  <button class="btn-primary" style="font-size:1.05rem; padding:17px 42px;">
+    Start Exploring Free →
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <img src="image/logo.png" alt="Promptlyn" class="footer-logo-img" />
+      </div>
+      <p class="footer-tagline">
+        Real Prompts. Better Results.<br>
+        The internet's largest free AI prompt library — built for humans who want to get things done.
+      </p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#">All Prompts</a></li>
+          <li><a href="#">Categories</a></li>
+          <li><a href="#">Trending</a></li>
+          <li><a href="#">New Today</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="#">AI & ChatGPT</a></li>
+          <li><a href="#">Marketing</a></li>
+          <li><a href="#">Coding</a></li>
+          <li><a href="#">Writing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Submit a Prompt</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Promptlyn. All rights reserved.</div>
+    <div class="social-icons">
+      <a href="#" class="social-icon" title="Twitter/X">𝕏</a>
+      <a href="#" class="social-icon" title="GitHub">⌥</a>
+      <a href="#" class="social-icon" title="Discord">◈</a>
+      <a href="#" class="social-icon" title="LinkedIn">in</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════ -->
+<script>
+/* ── Rotating tool name in hero ── */
+(function() {
+  var tools = ['ChatGPT','Claude','Grok','Gemini','v0','Lovable','Cursor','Bolt'];
+  var el = document.getElementById('rotating-tool');
+  var i = 0;
+  setInterval(function() {
+    el.style.opacity = '0';
+    setTimeout(function() {
+      i = (i + 1) % tools.length;
+      el.textContent = tools[i];
+      el.style.opacity = '1';
+    }, 300);
+  }, 2000);
+})();
+
+/* ── Magic badge rotating text ── */
+(function() {
+  var texts = ['Launching Soon','Something Magical','Coming Very Soon','Get Ready ✨','Be First 🚀'];
+  var el = document.getElementById('magic-text');
+  var i = 0;
+  setInterval(function() {
+    el.style.opacity = '0';
+    setTimeout(function() {
+      i = (i + 1) % texts.length;
+      el.textContent = texts[i];
+      el.style.opacity = '1';
+    }, 300);
+  }, 2800);
+})();
+
+/* ── Dismiss bar ── */
+document.getElementById('dismiss-bar').addEventListener('click', function() {
+  var bar = document.getElementById('announce-bar');
+  bar.style.transition = 'height .3s, opacity .3s, padding .3s';
+  bar.style.height = '0'; bar.style.opacity = '0'; bar.style.padding = '0';
+  setTimeout(function(){ bar.remove(); }, 350);
+});
+
+/* ── Floating particles ── */
+(function() {
+  var container = document.getElementById('particles');
+  for (var i = 0; i < 28; i++) {
+    (function(i) {
+      var p = document.createElement('div');
+      p.className = 'particle';
+      var size = Math.random() * 4 + 1.5;
+      p.style.cssText = [
+        'width:' + size + 'px',
+        'height:' + size + 'px',
+        'left:' + (Math.random() * 100) + '%',
+        'bottom:' + (-size) + 'px',
+        'animation-duration:' + (8 + Math.random() * 16) + 's',
+        'animation-delay:' + (Math.random() * 12) + 's',
+        'opacity:0'
+      ].join(';');
+      container.appendChild(p);
+    })(i);
+  }
+})();
+
+/* ── Live counter ── */
+(function() {
+  var el = document.getElementById('counter-num');
+  var base = 20847;
+  function fmt(n) { return n.toLocaleString(); }
+  el.textContent = fmt(base);
+  setInterval(function() {
+    var add = Math.random() < 0.4 ? Math.floor(Math.random() * 3 + 1) : 0;
+    base += add;
+    if (add) {
+      el.textContent = fmt(base);
+      el.style.transform = 'scale(1.08)';
+      setTimeout(function(){ el.style.transform = 'scale(1)'; el.style.transition = 'transform .3s'; }, 150);
+    }
+  }, 3200);
+})();
+
+/* ── Categories ── */
+var categories = [
+  { name: 'AI & ChatGPT',     icon: '🤖', count: 3420, color: '#7c3aed', badge: 'HOT' },
+  { name: 'GPT-4o',           icon: '✨', count: 2760, color: '#10a37f', badge: 'TOP' },
+  { name: 'Claude Skills',    icon: '🧠', count: 1840, color: '#cc785c', badge: 'NEW' },
+  { name: 'Grok',             icon: '⚡', count: 980,  color: '#1d9bf0', badge: 'NEW' },
+  { name: 'Gemini',           icon: '💎', count: 1120, color: '#4285f4', badge: '' },
+  { name: 'Lovable',          icon: '💜', count: 640,  color: '#a855f7', badge: 'NEW' },
+  { name: 'v0 by Vercel',     icon: '▲',  count: 720,  color: '#ffffff', badge: 'HOT' },
+  { name: 'Bolt.new',         icon: '⚡', count: 590,  color: '#f59e0b', badge: '' },
+  { name: 'Cursor',           icon: '🖱️', count: 810,  color: '#6366f1', badge: '' },
+  { name: 'Chatbot & Agents', icon: '🤝', count: 1350, color: '#ec4899', badge: '' },
+  { name: 'Writing & Content',icon: '✍️', count: 2890, color: '#ec4899', badge: 'TOP' },
+  { name: 'Marketing & Ads',  icon: '📣', count: 2145, color: '#f59e0b', badge: '' },
+  { name: 'Coding & Dev',     icon: '💻', count: 1970, color: '#6366f1', badge: '' },
+  { name: 'Business & SEO',   icon: '📈', count: 1640, color: '#10b981', badge: '' },
+  { name: 'Science & Research',icon: '🔬',count: 920,  color: '#06b6d4', badge: '' },
+  { name: 'Education',        icon: '🎓', count: 1380, color: '#3b82f6', badge: '' },
+  { name: 'Social Media',     icon: '📱', count: 2210, color: '#f43f5e', badge: 'HOT' },
+  { name: 'Design & Creative',icon: '🎨', count: 1190, color: '#8b5cf6', badge: '' },
+  { name: 'Image Generation', icon: '🖼️', count: 1560, color: '#f43f5e', badge: '' },
+  { name: 'Productivity',     icon: '⚙️', count: 870,  color: '#64748b', badge: '' },
+];
+var catGrid = document.getElementById('cat-grid');
+categories.forEach(function(c) {
+  var card = document.createElement('div');
+  card.className = 'cat-card';
+  card.innerHTML =
+    (c.badge ? '<span class="cat-badge">' + c.badge + '</span>' : '') +
+    '<div class="cat-icon" style="background:' + c.color + '22;border-color:' + c.color + '44">' + c.icon + '</div>' +
+    '<div class="cat-name">' + c.name + '</div>' +
+    '<div class="cat-count">' + c.count.toLocaleString() + ' prompts</div>';
+  catGrid.appendChild(card);
+});
+
+/* ── Featured Prompts ── */
+var prompts = [
+  { cat:'AI & ChatGPT',  catColor:'#7c3aed', catBg:'rgba(124,58,237,0.15)',
+    title:'Ultimate ChatGPT System Prompt',
+    preview:'Transform any ChatGPT session into a specialized expert. This prompt unlocks deep reasoning mode and forces structured, actionable responses every time.',
+    copied: false },
+  { cat:'Marketing',     catColor:'#ec4899', catBg:'rgba(236,72,153,0.15)',
+    title:'Viral Twitter/X Thread Generator',
+    preview:'Generate a 15-tweet thread that hooks readers in the first 3 words, builds tension, and closes with a CTA that actually converts. Battle-tested on 200k+ impressions.',
+    copied: false },
+  { cat:'Coding & Dev',  catColor:'#6366f1', catBg:'rgba(99,102,241,0.15)',
+    title:'Code Reviewer & Refactor Expert',
+    preview:'Paste any function and get: bug analysis, refactored version, performance notes, and test cases. Supports Python, JS, TypeScript, Go, and Rust.',
+    copied: false },
+  { cat:'Writing',       catColor:'#f59e0b', catBg:'rgba(245,158,11,0.15)',
+    title:'Blog Post Outline Master',
+    preview:'Creates a full SEO-optimized blog post outline with H2s, H3s, internal link suggestions, and a meta description — all tuned for your exact target keyword.',
+    copied: false },
+  { cat:'Business',      catColor:'#10b981', catBg:'rgba(16,185,129,0.15)',
+    title:'Startup Pitch Deck Storyteller',
+    preview:'Describe your startup in one sentence and get a complete 10-slide narrative arc — problem, solution, traction, market, ask — investor-ready language included.',
+    copied: false },
+  { cat:'Education',     catColor:'#3b82f6', catBg:'rgba(59,130,246,0.15)',
+    title:'Feynman Technique Explainer',
+    preview:'Give it any complex topic and get a crystal-clear explanation as if you\'re 12 years old, then gradually build to expert-level nuance. Perfect for studying.',
+    copied: false },
+];
+var promptGrid = document.getElementById('prompt-grid');
+var samplePromptTexts = [
+  'You are an expert assistant. For this session, apply chain-of-thought reasoning before every answer. Structure all responses with: [Analysis] → [Key Insight] → [Action Steps]. Be concise but complete.',
+  'Write a viral Twitter thread about [TOPIC]. Start with a bold, contrarian hook. 15 tweets. Each tweet builds on the last. End with a strong CTA. No filler. Make every tweet punchy.',
+  'Review this code for: 1) bugs 2) performance issues 3) security vulnerabilities 4) readability. Then provide a refactored version with inline comments explaining key changes.',
+  'Create a detailed blog post outline for: [KEYWORD]. Include: title tag, meta description, H2s, H3s, FAQ section, and internal link opportunities. Optimize for search intent.',
+  'You are a Y Combinator partner. Given this startup: [DESCRIPTION], craft a compelling 10-slide pitch deck narrative. Be brutally honest about weaknesses. Include the ask.',
+  'Explain [CONCEPT] using the Feynman Technique: start at a 5th-grade level, build complexity in 3 stages, use analogies, and end with a 3-question quiz to test understanding.',
+];
+prompts.forEach(function(p, i) {
+  var card = document.createElement('div');
+  card.className = 'prompt-card';
+  var btnId = 'copy-btn-' + i;
+  card.innerHTML =
+    '<span class="p-badge" style="background:' + p.catBg + ';color:' + p.catColor + ';border:1px solid ' + p.catColor + '33">' + p.cat + '</span>' +
+    '<div class="p-title">' + p.title + '</div>' +
+    '<div class="p-preview">' + p.preview + '</div>' +
+    '<button class="p-copy" id="' + btnId + '" data-idx="' + i + '">📋 Copy Prompt</button>';
+  promptGrid.appendChild(card);
+});
+document.getElementById('prompt-grid').addEventListener('click', function(e) {
+  var btn = e.target.closest('.p-copy');
+  if (!btn) return;
+  var idx = parseInt(btn.dataset.idx, 10);
+  var text = samplePromptTexts[idx];
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = '📋 Copy Prompt';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+});
+
+/* ── Live Ticker ── */
+var tickEvents = [
+  '✦ Someone just used the <strong>ChatGPT Marketing prompt</strong>',
+  '✦ New prompt added: <strong>Blog Writing Master</strong>',
+  '✦ <strong>47 people</strong> browsing the Coding category right now',
+  '✦ Someone just used the <strong>Viral Twitter Thread Generator</strong>',
+  '✦ New prompt added: <strong>AI Product Manager Framework</strong>',
+  '✦ <strong>Code Reviewer prompt</strong> copied 12 times this hour',
+  '✦ Someone just used the <strong>Startup Pitch Deck prompt</strong>',
+  '✦ New prompt added: <strong>Advanced SEO Audit Checklist</strong>',
+  '✦ <strong>203 prompts</strong> added this week',
+  '✦ Someone just used the <strong>Feynman Technique Explainer</strong>',
+  '✦ New prompt added: <strong>YouTube Script Hook Master</strong>',
+  '✦ <strong>Writing prompts</strong> trending — up 140% today',
+];
+var times = ['Just now', '2s ago', '5s ago', '12s ago', '18s ago', '30s ago', '44s ago', '1m ago', '2m ago', '3m ago', '4m ago', '5m ago'];
+var track = document.getElementById('ticker-track');
+var html = '';
+for (var r = 0; r < 2; r++) {
+  tickEvents.forEach(function(ev, i) {
+    html += '<span class="tick-item">' + ev + ' <span class="time">· ' + times[i % times.length] + '</span><span class="dot"> ◆</span></span>';
+  });
+}
+track.innerHTML = html;
+</script>
+</body>
+</html>
