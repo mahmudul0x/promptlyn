@@ -511,18 +511,25 @@
 
   <section class="card">
     <h2 id="permissions"><span class="num">14</span>App permissions</h2>
-    <p class="tight">The app requests exactly one Android permission:</p>
+    <p class="tight">The app declares these Android permissions. All of them are “normal”
+    permissions, which means Android grants them at install time and never
+    shows you a prompt — none gives access to anything personal.</p>
     <div class="table-scroll">
       <table>
         <thead><tr><th>Permission</th><th>Why</th></tr></thead>
         <tbody>
-          <tr><td><code>INTERNET</code></td><td>To download the prompt catalogue and its artwork.</td></tr>
+          <tr><td><code>INTERNET</code></td><td>To download prompts and artwork.</td></tr>
+          <tr><td><code>ACCESS_NETWORK_STATE</code></td><td>To tell whether you are online, so the app can show cached content and an offline notice instead of failing.</td></tr>
+          <tr><td><code>WAKE_LOCK</code></td><td>Added by the Firebase libraries so a crash report or queued analytics batch can finish sending.</td></tr>
+          <tr><td><code>BIND_GET_INSTALL_REFERRER_SERVICE</code></td><td>Added by Firebase Analytics to read how the app was found on Google Play.</td></tr>
         </tbody>
       </table>
     </div>
-    <p>It requests no access to storage, camera, microphone, location,
-    contacts, or any other sensitive capability. The advertising-ID permission
-    that the analytics library would otherwise add is explicitly removed.</p>
+    <p>The app requests <strong>no</strong> access to storage, camera,
+    microphone, location, contacts, calendar, or any other sensitive
+    capability, and Android will never ask you to approve anything. The
+    advertising-ID permission that the analytics library would otherwise add is
+    explicitly removed from the build.</p>
   </section>
 
   <section class="card">
