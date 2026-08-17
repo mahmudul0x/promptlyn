@@ -649,9 +649,9 @@
       padding: 60px 5% 0;
     }
     .footer-inner {
-      display: flex; gap: 48px;
-      justify-content: space-between; margin-bottom: 48px;
-      flex-wrap: wrap;
+      display: flex; gap: 32px 48px;
+      justify-content: space-between; align-items: flex-end;
+      margin-bottom: 40px; flex-wrap: wrap;
     }
     .footer-brand { max-width: 300px; display: flex; flex-direction: column; gap: 0; }
     .footer-logo { margin-bottom: 16px; }
@@ -661,19 +661,15 @@
     }
     .footer-social { display: flex; gap: 9px; flex-wrap: wrap; }
 
-    .footer-nav-grid { display: flex; gap: 48px; flex-wrap: wrap; }
-    .footer-col h4 {
-      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
-      text-transform: uppercase; color: rgba(255,255,255,0.45);
-      margin-bottom: 18px;
+    .footer-links {
+      display: flex; flex-wrap: wrap; gap: 10px 30px;
+      align-items: center;
     }
-    .footer-col ul { list-style: none; }
-    .footer-col li { margin-bottom: 11px; }
-    .footer-col a {
+    .footer-links a {
       font-size: 0.875rem; color: rgba(255,255,255,0.5);
       text-decoration: none; transition: color .2s;
     }
-    .footer-col a:hover { color: #fff; }
+    .footer-links a:hover { color: #fff; }
 
     .footer-bottom {
       display: flex; align-items: center; justify-content: space-between;
@@ -877,11 +873,9 @@
       .footer-social { justify-content: center; gap: 10px; }
       .social-icon { width: 40px; height: 40px; }
       .social-icon svg { width: 16px; height: 16px; }
-      .footer-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; width: 100%; }
-      .footer-col { padding: 0 8px; }
-      .footer-col h4 { font-size: 0.68rem; margin-bottom: 12px; letter-spacing: 0.08em; }
-      .footer-col a { font-size: 0.8rem; }
-      .footer-col li { margin-bottom: 9px; }
+      .footer-links { justify-content: center; gap: 10px 22px; }
+      .footer-links a { font-size: 0.82rem; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 14px; }
       .mobile-hide { display: none; }
       .footer-bottom { flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 18px 0 24px; }
       .footer-bottom-links { justify-content: center; gap: 16px; }
@@ -899,8 +893,7 @@
       .why-grid { grid-template-columns: 1fr; }
       .stats-inner { grid-template-columns: 1fr 1fr; }
       .stat-num { font-size: 1.3rem; }
-      .footer-nav-grid { grid-template-columns: repeat(3, 1fr); }
-      .footer-col:last-child { grid-column: unset; }
+      .footer-links { justify-content: center; }
       .curiosity-strip { flex-direction: column; gap: 6px; }
       .c-sep { display: none; }
       .nav-center-badge { display: none; }
@@ -921,7 +914,7 @@
      NAVIGATION
 ══════════════════════════════════════════════ -->
 <nav>
-  <a href="#" class="nav-logo">
+  <a href="/" class="nav-logo">
     <img src="image/logo.png" alt="Promptlyn" class="nav-logo-img" />
   </a>
   <div class="nav-center-badge">
@@ -1131,44 +1124,24 @@
       </div>
     </div>
 
-    <!-- Nav columns -->
-    <div class="footer-nav-grid">
-      <div class="footer-col">
-        <h4>Company</h4>
-        <ul>
-          <li><a href="#">About</a></li>
-          <li class="mobile-hide"><a href="#">Blog</a></li>
-          <li class="mobile-hide"><a href="#">Submit a Prompt</a></li>
-          <li><a href="#">Contact</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Use</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Explore</h4>
-        <ul>
-          <li><a href="#">All Prompts</a></li>
-          <li><a href="#">Categories</a></li>
-          <li><a href="#">Trending</a></li>
-          <li class="mobile-hide"><a href="#">New Today</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Categories</h4>
-        <ul>
-          <li><a href="#">AI & ChatGPT</a></li>
-          <li><a href="#">Marketing</a></li>
-          <li><a href="#">Coding</a></li>
-          <li><a href="#">Writing</a></li>
-        </ul>
-      </div>
-    </div>
+    <!-- One row of links: three columns looked sparse and half of them
+         pointed nowhere. Everything listed here resolves. -->
+    <nav class="footer-links" aria-label="Footer">
+      <a href="#preview">What's inside</a>
+      <a href="#categories">Categories</a>
+      <a href="prompts.html">Sample prompts</a>
+      <a href="mailto:support@promptlyn.com">Contact</a>
+    </nav>
 
   </div>
 
   <!-- Bottom bar -->
   <div class="footer-bottom">
-    <div class="footer-copy">© 2026 Promptlyn. All rights reserved.</div>
+    <div class="footer-copy">© 2026 Promptlyn. Published by Cerrow.</div>
+    <div class="footer-bottom-links">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Use</a>
+    </div>
   </div>
 </footer>
 
