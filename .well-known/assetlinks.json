@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.promptlyn.app",
+      "sha256_cert_fingerprints": ["8A:9C:3E:C6:0B:D0:2A:75:5B:B9:C6:79:4C:71:3A:3D:4B:F0:29:E7:A4:A2:8C:D7:4E:B3:8B:DF:4B:68:32:86"]
+    }
+  }
+]
