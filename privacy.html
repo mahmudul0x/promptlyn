@@ -3,169 +3,545 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="How the Promptlyn Android app handles data. No accounts, no personal information, no advertising identifiers.">
+<meta name="robots" content="index, follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 <title>Privacy Policy — Promptlyn</title>
 <style>
+  /* Palette lifted from the app itself (lib/core/theme/app_colors.dart) so
+     someone arriving here from Settings does not feel they left the product. */
   :root {
     color-scheme: light dark;
-    --bg: #ffffff;
-    --fg: #17171c;
-    --muted: #5c5c6b;
-    --rule: #e4e4ec;
-    --accent: #7c3aed;
+    --bg: #E9E6F3;
+    --surface: #F4F2FA;
+    --surface-alt: #DFDAEF;
+    --border: #CFC8E4;
+    --label: #171426;
+    --label-2: #575270;
+    --label-3: #7B7593;
+    --accent: #6D28D9;
+    --accent-2: #2563EB;
+    --grad: linear-gradient(135deg, #8B5CF6, #3B82F6);
+    --shadow: 0 1px 2px rgba(23, 20, 38, .06), 0 8px 24px rgba(23, 20, 38, .06);
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #101015; --fg: #ececf1; --muted: #9c9cae; --rule: #26262f; --accent: #a78bfa; }
+    :root {
+      --bg: #0A0817;
+      --surface: #161228;
+      --surface-alt: #1E1936;
+      --border: #2E2751;
+      --label: #F7F6FB;
+      --label-2: #B3ADCB;
+      --label-3: #8A83A8;
+      --accent: #A78BFA;
+      --accent-2: #60A5FA;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
+    }
   }
+
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     margin: 0;
     background: var(--bg);
-    color: var(--fg);
-    font: 16px/1.65 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--label);
+    font: 400 16px/1.7 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
   }
-  main { max-width: 44rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
-  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 .35rem; letter-spacing: -.02em; }
-  h2 { font-size: 1.15rem; margin: 2.5rem 0 .6rem; letter-spacing: -.01em; }
-  .updated { color: var(--muted); font-size: .9rem; margin: 0 0 2.5rem; }
-  .lede { font-size: 1.06rem; }
-  a { color: var(--accent); }
-  ul { padding-left: 1.15rem; }
-  li { margin: .4rem 0; }
-  table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .95rem; }
-  th, td { text-align: left; padding: .6rem .5rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
-  th { font-weight: 600; }
-  .note { border-left: 3px solid var(--accent); padding: .1rem 0 .1rem 1rem; margin: 1.5rem 0; color: var(--muted); }
-  footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: .9rem; }
-  code { background: var(--rule); padding: .1em .35em; border-radius: 4px; font-size: .9em; }
+
+  /* Header */
+  .top {
+    background: var(--grad);
+    color: #fff;
+    padding: 2.75rem 1.25rem 3.25rem;
+  }
+  .top-inner { max-width: 52rem; margin: 0 auto; }
+  .brand {
+    display: inline-flex; align-items: center; gap: .6rem;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-weight: 800; font-size: 1.05rem; letter-spacing: -.01em;
+    color: #fff; text-decoration: none; opacity: .95;
+  }
+  .mark {
+    width: 30px; height: 30px; border-radius: 9px;
+    background: rgba(255,255,255,.22);
+    display: grid; place-items: center;
+    font-weight: 800; font-size: .95rem;
+    border: 1px solid rgba(255,255,255,.28);
+  }
+  .top h1 {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-size: clamp(2rem, 5vw, 2.6rem); font-weight: 800;
+    letter-spacing: -.03em; line-height: 1.15; margin: 1.6rem 0 .5rem;
+  }
+  .top .meta { opacity: .9; font-size: .95rem; margin: 0; }
+
+  /* Layout */
+  .wrap {
+    max-width: 52rem; margin: -1.75rem auto 0;
+    padding: 0 1.25rem 5rem;
+    display: grid; gap: 1.25rem;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.6rem 1.5rem;
+    box-shadow: var(--shadow);
+    /* Grid items default to min-width:auto, so a wide table inside would
+       stretch the card past the viewport and make the whole page scroll
+       sideways on a phone — the .table-scroll box only works once the card
+       is allowed to be narrower than its contents. */
+    min-width: 0;
+  }
+  .card.glance { border-left: 4px solid transparent; background-image: linear-gradient(var(--surface), var(--surface)), var(--grad); background-origin: border-box; background-clip: padding-box, border-box; }
+
+  h2 {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-size: 1.2rem; font-weight: 700; letter-spacing: -.015em;
+    margin: 0 0 .5rem; scroll-margin-top: 1rem;
+  }
+  h2 .num {
+    display: inline-block; min-width: 1.6rem;
+    color: var(--accent); font-weight: 800;
+  }
+  h3 { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 .35rem; }
+  p { margin: .7rem 0; color: var(--label-2); }
+  p.tight { margin-top: 0; }
+  .card > h2 + p { margin-top: 0; }
+  strong { color: var(--label); font-weight: 600; }
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+
+  ul, ol { padding-left: 1.2rem; margin: .7rem 0; color: var(--label-2); }
+  li { margin: .45rem 0; }
+  li::marker { color: var(--accent); }
+
+  .glance ul { list-style: none; padding: 0; margin: .8rem 0 0; }
+  .glance li {
+    display: grid; grid-template-columns: 1.6rem 1fr; gap: .5rem;
+    margin: .6rem 0; color: var(--label-2);
+  }
+  .glance .tick { color: #10B981; font-weight: 700; }
+  .glance .cross { color: #EF4444; font-weight: 700; }
+
+  /* Tables scroll rather than push the page sideways on a phone. */
+  .table-scroll { overflow-x: auto; margin: 1rem 0; -webkit-overflow-scrolling: touch; }
+  table { border-collapse: collapse; width: 100%; min-width: 30rem; font-size: .93rem; }
+  thead th {
+    text-align: left; font-weight: 600; color: var(--label);
+    background: var(--surface-alt);
+    padding: .65rem .75rem; white-space: nowrap;
+  }
+  thead th:first-child { border-radius: 10px 0 0 10px; }
+  thead th:last-child { border-radius: 0 10px 10px 0; }
+  td { padding: .7rem .75rem; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--label-2); }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  code {
+    background: var(--surface-alt); color: var(--label);
+    padding: .12em .4em; border-radius: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .87em;
+  }
+
+  .note {
+    background: var(--surface-alt);
+    border-radius: 12px; padding: .9rem 1.1rem; margin: 1.1rem 0;
+    color: var(--label-2); font-size: .95rem;
+  }
+  .note strong { display: block; margin-bottom: .2rem; color: var(--label); }
+
+  /* Contents */
+  .toc ol { list-style: none; padding: 0; margin: .6rem 0 0; columns: 2; column-gap: 1.75rem; }
+  .toc li { margin: .3rem 0; break-inside: avoid; }
+  .toc a { color: var(--label-2); text-decoration: none; font-size: .94rem; }
+  .toc a:hover { color: var(--accent); }
+  .toc .n { color: var(--accent); font-weight: 700; margin-right: .35rem; }
+  @media (max-width: 34rem) { .toc ol { columns: 1; } }
+
+  footer {
+    max-width: 52rem; margin: 0 auto; padding: 2rem 1.25rem 3rem;
+    border-top: 1px solid var(--border);
+    color: var(--label-3); font-size: .9rem;
+    display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; align-items: center;
+  }
+  footer a { color: var(--label-2); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+  .spacer { flex: 1; }
 </style>
 </head>
 <body>
-<main>
 
-<h1>Privacy Policy</h1>
-<p class="updated">Promptlyn · Last updated 17 August 2026</p>
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="/"><span class="mark">P</span> Promptlyn</a>
+    <h1>Privacy Policy</h1>
+    <p class="meta">Applies to the Promptlyn Android app (<code style="background:rgba(255,255,255,.18);color:#fff">com.promptlyn.app</code>) and promptlyn.com<br>
+    Effective 17 August 2026 · Last updated 17 August 2026</p>
+  </div>
+</header>
 
-<p class="lede">Promptlyn has no accounts and asks for nothing about you. There
-is no sign-up, no email, no profile. This page describes the small amount of
-data the app does handle and why.</p>
+<div class="wrap">
 
-<h2>What we do not collect</h2>
-<ul>
-  <li>No name, email address, phone number, or postal address.</li>
-  <li>No contacts, photos, files, location, or microphone access.</li>
-  <li>No advertising identifier. The app has no ads and does not use the
-      Android Advertising ID; the permission is explicitly removed from the
-      build.</li>
-  <li>Nothing that identifies you personally, and nothing that follows you
-      to other apps or websites.</li>
-</ul>
+  <section class="card glance">
+    <h2>At a glance</h2>
+    <ul>
+      <li><span class="cross">✕</span><span>No account. No name, email, phone number, or address is ever requested or stored.</span></li>
+      <li><span class="cross">✕</span><span>No advertising ID, no ads, no ad networks, no data brokers.</span></li>
+      <li><span class="cross">✕</span><span>Nothing is sold or shared for advertising, ever.</span></li>
+      <li><span class="tick">✓</span><span>Anonymous usage statistics, so we know which prompts are worth adding more of.</span></li>
+      <li><span class="tick">✓</span><span>Crash reports, so faults get fixed.</span></li>
+      <li><span class="tick">✓</span><span>Uninstalling the app erases everything tied to your installation.</span></li>
+    </ul>
+  </section>
 
-<h2>What stays only on your phone</h2>
-<p>These never leave your device and are deleted when you uninstall the app or
-clear its data:</p>
-<ul>
-  <li>Prompts you save to Collections.</li>
-  <li>Prompts you have recently opened.</li>
-  <li>Your recent search terms.</li>
-  <li>Your light/dark theme choice.</li>
-</ul>
+  <nav class="card toc" aria-label="Contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#who"><span class="n">1</span>Who we are</a></li>
+      <li><a href="#scope"><span class="n">2</span>What this covers</a></li>
+      <li><a href="#not-collected"><span class="n">3</span>What we never collect</a></li>
+      <li><a href="#device"><span class="n">4</span>Stored only on your device</a></li>
+      <li><a href="#collected"><span class="n">5</span>What we do collect</a></li>
+      <li><a href="#safety"><span class="n">6</span>Data safety summary</a></li>
+      <li><a href="#why"><span class="n">7</span>Why, and our legal basis</a></li>
+      <li><a href="#processors"><span class="n">8</span>Service providers</a></li>
+      <li><a href="#transfers"><span class="n">9</span>International transfers</a></li>
+      <li><a href="#retention"><span class="n">10</span>How long we keep it</a></li>
+      <li><a href="#security"><span class="n">11</span>Security</a></li>
+      <li><a href="#children"><span class="n">12</span>Children</a></li>
+      <li><a href="#rights"><span class="n">13</span>Your rights and choices</a></li>
+      <li><a href="#permissions"><span class="n">14</span>App permissions</a></li>
+      <li><a href="#links"><span class="n">15</span>Links to other services</a></li>
+      <li><a href="#changes"><span class="n">16</span>Changes</a></li>
+      <li><a href="#contact"><span class="n">17</span>Contact</a></li>
+    </ol>
+  </nav>
 
-<h2>What the app sends to our server</h2>
+  <section class="card">
+    <h2 id="who"><span class="num">1</span>Who we are</h2>
+    <p class="tight">Promptlyn is a free library of prompts for AI tools, published as an
+    Android app and at promptlyn.com. In this policy, “we” and “Promptlyn” mean
+    the publisher of that app, and “you” means the person using it.</p>
+    <p>We are the data controller for the information described below. For any
+    privacy question, write to
+    <a href="mailto:support@promptlyn.com">support@promptlyn.com</a>; we aim to
+    reply within 30 days.</p>
+  </section>
 
-<h3 style="font-size:1rem;margin:1.5rem 0 .4rem;">An anonymous installation ID</h3>
-<p>On first launch the app generates a random identifier and stores it on the
-device. It is sent with requests to our API so we can count how many distinct
-people use the app rather than how many requests arrive.</p>
-<p>It is not a device identifier. It is random, created by the app, unique to
-this installation, and unrelated to any hardware or account ID. Reinstalling
-the app or clearing its data produces a new one, and there is no way to link
-the old and new values. It cannot be used to identify you, and it means
-nothing outside Promptlyn.</p>
+  <section class="card">
+    <h2 id="scope"><span class="num">2</span>What this covers</h2>
+    <p class="tight">This policy covers the Promptlyn Android app
+    (<code>com.promptlyn.app</code>) and the promptlyn.com website. It does not
+    cover the AI tools the app can send you to — ChatGPT, Gemini, Claude,
+    Midjourney and others — which are run by separate companies under their own
+    policies. See section 15.</p>
+  </section>
 
-<div class="note">
-We use this instead of your IP address on purpose. Counting by IP would be
-both less accurate and more intrusive — mobile networks share one address
-across thousands of people, while a single phone's address changes as it
-moves between towers and Wi-Fi.
+  <section class="card">
+    <h2 id="not-collected"><span class="num">3</span>What we never collect</h2>
+    <p class="tight">The app has no sign-up and no login, so there is no account to attach
+    anything to. Specifically, we do not collect:</p>
+    <ul>
+      <li>Your name, email address, phone number, or postal address.</li>
+      <li>Contacts, photos, files, calendar, SMS, call logs, or microphone
+          input. The app requests none of these permissions.</li>
+      <li>Precise or approximate location.</li>
+      <li>The Android Advertising ID (AAID). The app carries no ads, and the
+          <code>AD_ID</code> permission is explicitly removed from the build
+          so the identifier cannot be read even by accident.</li>
+      <li>Any identifier that follows you across other apps or websites.</li>
+      <li>Payment or financial information. The app is free and has no
+          purchases.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2 id="device"><span class="num">4</span>Stored only on your device</h2>
+    <p class="tight">These never leave your phone. They are held in the app's private storage
+    and removed when you uninstall the app or clear its data:</p>
+    <ul>
+      <li>Prompts you save to Collections.</li>
+      <li>Which prompts you have recently opened.</li>
+      <li>Your recent search terms.</li>
+      <li>Your light or dark theme preference.</li>
+      <li>Whether you have seen the first-run introduction.</li>
+    </ul>
+    <p>We have no copy of any of it and no way to retrieve it.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="collected"><span class="num">5</span>What we do collect</h2>
+
+    <h3>An anonymous installation identifier</h3>
+    <p class="tight">On first launch the app generates a random identifier and stores it on
+    your device. It accompanies requests to our servers so we can count how many
+    distinct people use the app rather than how many requests arrive.</p>
+    <p>It is <strong>not a device identifier</strong>: it is randomly generated
+    by the app, unique to this installation, and derived from nothing about your
+    phone or any account. Reinstalling or clearing app data produces a new value
+    with no link to the previous one. It means nothing outside Promptlyn and
+    cannot identify you.</p>
+    <div class="note">
+      <strong>Why not just use the IP address?</strong>
+      Counting by IP would be both less accurate and more intrusive. Mobile
+      carriers share one address among thousands of subscribers, while a single
+      phone's address changes as it moves between towers and Wi-Fi. A random
+      per-install value counts better and reveals less.
+    </div>
+
+    <h3>Usage events</h3>
+    <p class="tight">The app records which parts of the catalogue are used, so we know what to
+    add more of. Each event carries the identifier of the prompt or category
+    involved, and nothing that identifies you:</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Event</th><th>Sent when</th><th>What it contains</th></tr></thead>
+        <tbody>
+          <tr><td><code>prompt_revealed</code></td><td>You tap Generate Prompt</td><td>Prompt ID, which screen</td></tr>
+          <tr><td><code>prompt_copied</code></td><td>You copy a prompt</td><td>Prompt ID, category ID</td></tr>
+          <tr><td><code>prompt_launched</code></td><td>You open a prompt in an AI tool</td><td>Prompt ID, which tool</td></tr>
+          <tr><td><code>prompt_saved</code></td><td>You add or remove a Collection item</td><td>Prompt ID, added or removed</td></tr>
+          <tr><td><code>prompt_search</code></td><td>You run a search</td><td>The search term, number of results</td></tr>
+          <tr><td><code>category_opened</code></td><td>You open a category</td><td>Category ID</td></tr>
+          <tr><td><code>gallery_image_opened</code></td><td>You open a Gallery image</td><td>Prompt ID</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Google Analytics for Firebase also records standard app events such as
+    first open, session start, and screen views, together with general device
+    information — model, operating system version, language, and country. It
+    does not receive your name or contact details, because the app never has
+    them.</p>
+
+    <h3>Crash reports</h3>
+    <p class="tight">If the app stops unexpectedly, a diagnostic report is sent so the fault
+    can be fixed. It contains the error, the point in the code where it
+    happened, the device model, the Android version, and how long the app had
+    been running. It does not contain your Collections, your searches, or
+    anything you have typed.</p>
+
+    <h3>Server logs</h3>
+    <p class="tight">Our API records standard request logs — the URL requested, the time, the
+    response status, and the IP address the request arrived from. IP addresses
+    are used only to keep the service running and to block abuse; they are never
+    used to build a profile, and they are not joined to your installation
+    identifier for that purpose.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="safety"><span class="num">6</span>Data safety summary</h2>
+    <p class="tight">This is the same information we declare on the app's Google Play Data
+    safety page, restated here so the two always agree.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Data type</th><th>Collected</th><th>Shared</th><th>Purpose</th><th>Optional?</th></tr></thead>
+        <tbody>
+          <tr><td>App activity (in-app actions, search terms)</td><td>Yes</td><td>No</td><td>Analytics, improving the catalogue</td><td>Required</td></tr>
+          <tr><td>Crash logs &amp; diagnostics</td><td>Yes</td><td>No</td><td>Fixing faults, app stability</td><td>Required</td></tr>
+          <tr><td>Device or other IDs (anonymous install ID)</td><td>Yes</td><td>No</td><td>Counting distinct users</td><td>Required</td></tr>
+          <tr><td>Personal info, contacts, location, photos, files, messages, financial info, health</td><td>No</td><td>No</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Data is encrypted in transit. Nothing above is used for advertising or
+    marketing, and none of it is sold.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="why"><span class="num">7</span>Why, and our legal basis</h2>
+    <p class="tight">Where the UK GDPR or EU GDPR applies to you, we rely on these bases:</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Purpose</th><th>Data used</th><th>Legal basis</th></tr></thead>
+        <tbody>
+          <tr><td>Delivering the prompt catalogue you asked for</td><td>Request logs, install ID</td><td>Performance of a contract</td></tr>
+          <tr><td>Understanding which prompts are useful</td><td>Usage events, install ID</td><td>Legitimate interests — improving a free product, using data that identifies no one</td></tr>
+          <tr><td>Fixing crashes</td><td>Crash diagnostics</td><td>Legitimate interests — keeping the app usable</td></tr>
+          <tr><td>Preventing abuse of the API</td><td>IP address, request rate</td><td>Legitimate interests — protecting the service</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>We do not rely on consent for any of the above, because none of it
+    involves personal data of a kind that would require it, and none of it is
+    used for advertising. If that ever changes, we will ask first.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="processors"><span class="num">8</span>Service providers</h2>
+    <p class="tight">A small number of companies process data on our behalf, under contract
+    and only for the purposes below. They are not permitted to use it for their
+    own purposes.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Provider</th><th>What it receives</th><th>Why</th><th>Their policy</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Google (Firebase Analytics &amp; Crashlytics)</td>
+            <td>Usage events, crash diagnostics, general device information</td>
+            <td>Usage statistics and crash reporting</td>
+            <td><a href="https://firebase.google.com/support/privacy" rel="noopener">firebase.google.com/support/privacy</a></td>
+          </tr>
+          <tr>
+            <td>Cloudinary</td>
+            <td>Image requests, including the requesting IP address</td>
+            <td>Delivering prompt artwork sized for your screen</td>
+            <td><a href="https://cloudinary.com/privacy" rel="noopener">cloudinary.com/privacy</a></td>
+          </tr>
+          <tr>
+            <td>Netlify</td>
+            <td>Requests to promptlyn.com</td>
+            <td>Hosting this website</td>
+            <td><a href="https://www.netlify.com/privacy/" rel="noopener">netlify.com/privacy</a></td>
+          </tr>
+          <tr>
+            <td>Our own servers</td>
+            <td>Install ID, which prompts are requested</td>
+            <td>Serving the catalogue and counting distinct users</td>
+            <td>This policy</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>We do not sell personal information, and we do not share it for
+    cross-context behavioural advertising, as those terms are used in the
+    California Consumer Privacy Act. We have never done so.</p>
+    <p>We may disclose information if required by law, or where necessary to
+    investigate abuse of the service. If that ever happens we will tell users
+    unless legally prevented from doing so.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="transfers"><span class="num">9</span>International transfers</h2>
+    <p class="tight">Our servers are in Europe. The providers above operate globally, so data
+    may be processed outside your country, including in the United States. Where
+    the GDPR applies, those transfers rely on the European Commission's Standard
+    Contractual Clauses or an adequacy decision, as set out in each provider's
+    own documentation.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="retention"><span class="num">10</span>How long we keep it</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Data</th><th>Retention</th></tr></thead>
+        <tbody>
+          <tr><td>Analytics events</td><td>Up to 14 months, then deleted automatically by Firebase</td></tr>
+          <tr><td>Crash reports</td><td>Up to 90 days</td></tr>
+          <tr><td>Daily visitor counts on our server</td><td>Kept as totals only; the underlying identifiers expire within 45 days</td></tr>
+          <tr><td>Server request logs</td><td>Up to 30 days</td></tr>
+          <tr><td>On-device data</td><td>Until you uninstall the app or clear its data</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 id="security"><span class="num">11</span>Security</h2>
+    <ul>
+      <li>All traffic between the app and our servers uses HTTPS with
+          certificate validation; the API refuses unencrypted connections.</li>
+      <li>Administrative access to the catalogue requires a separate
+          authenticated account and is restricted to us.</li>
+      <li>Our servers hold no personal information, so there is no account
+          database to breach.</li>
+      <li>Data stored on your device is kept in the app's private storage,
+          which Android isolates from other apps.</li>
+    </ul>
+    <p>No system is perfectly secure, but the most effective protection here is
+    structural: we do not hold information that could identify you, so there is
+    very little for an attacker to take.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="children"><span class="num">12</span>Children</h2>
+    <p class="tight">Promptlyn is intended for a general audience and is not directed at
+    children under 13 (or the equivalent minimum age where you live). We do not
+    knowingly collect personal information from children — and because the app
+    collects no personal information from anyone, there is none about a child to
+    collect either. The app contains no ads and no in-app purchases.</p>
+    <p>If you believe a child has provided us with personal information, contact
+    us and we will investigate and remove it.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="rights"><span class="num">13</span>Your rights and choices</h2>
+    <p class="tight">Depending on where you live, you may have the right to access, correct,
+    delete, restrict, or object to the processing of your personal data, to
+    receive a copy of it, and to complain to your data protection authority.</p>
+    <p>We want to be straightforward about how these apply here: because we hold
+    no name, email address, or account, <strong>we cannot look up “your” data on
+    request</strong> — there is no identifier we could match you to. This is a
+    consequence of collecting so little, not a way of avoiding the obligation.</p>
+    <h3>What you can do directly</h3>
+    <ul>
+      <li><strong>Erase everything:</strong> uninstall the app, or clear its
+          data in Android Settings → Apps → Promptlyn → Storage. Your saved
+          prompts, history, and the installation identifier are all destroyed,
+          and the identifier cannot be reconstructed afterwards.</li>
+      <li><strong>Reset the identifier without losing your prompts:</strong>
+          clearing app data resets it; there is no way to link the old value to
+          the new one.</li>
+      <li><strong>Stop analytics collection:</strong> uninstalling stops all
+          collection. Android's own settings also let you limit what apps may
+          use for advertising, though Promptlyn requests no advertising
+          identifier in the first place.</li>
+    </ul>
+    <p>If you have a request or a complaint, write to
+    <a href="mailto:support@promptlyn.com">support@promptlyn.com</a>. You also
+    have the right to lodge a complaint with your local supervisory authority.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="permissions"><span class="num">14</span>App permissions</h2>
+    <p class="tight">The app requests exactly one Android permission:</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Permission</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td><code>INTERNET</code></td><td>To download the prompt catalogue and its artwork.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>It requests no access to storage, camera, microphone, location,
+    contacts, or any other sensitive capability. The advertising-ID permission
+    that the analytics library would otherwise add is explicitly removed.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="links"><span class="num">15</span>Links to other services</h2>
+    <p class="tight">The app can open a prompt in an external AI tool such as ChatGPT, Gemini,
+    Claude, Grok, Midjourney or others. When you tap one of those buttons the
+    prompt is copied to your clipboard and the tool is opened — after which you
+    are on that company's service, governed by its terms and its privacy policy.
+    We have no visibility into what happens there, and we do not send them
+    anything about you.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="changes"><span class="num">16</span>Changes</h2>
+    <p class="tight">If this policy changes, the “last updated” date at the top changes with
+    it. Where a change materially affects what is collected or why, we will say
+    so in the app's release notes before the change takes effect. Continuing to
+    use the app after that means accepting the revised policy.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="contact"><span class="num">17</span>Contact</h2>
+    <p class="tight">Questions, requests, or complaints about privacy:</p>
+    <p><a href="mailto:support@promptlyn.com">support@promptlyn.com</a></p>
+  </section>
+
 </div>
 
-<h3 style="font-size:1rem;margin:1.5rem 0 .4rem;">Usage events</h3>
-<p>The app records which parts of the catalogue are used, so we know which
-prompts are worth adding more of. Each event carries the ID of the prompt or
-category involved and nothing about you:</p>
-
-<table>
-  <tr><th>Event</th><th>Recorded when</th></tr>
-  <tr><td><code>prompt_revealed</code></td><td>You tap Generate Prompt</td></tr>
-  <tr><td><code>prompt_copied</code></td><td>You copy a prompt</td></tr>
-  <tr><td><code>prompt_launched</code></td><td>You open a prompt in ChatGPT, Gemini, or another tool</td></tr>
-  <tr><td><code>prompt_saved</code></td><td>You add or remove a prompt from Collections</td></tr>
-  <tr><td><code>prompt_search</code></td><td>You run a search (the search term is included)</td></tr>
-  <tr><td><code>category_opened</code></td><td>You open a category</td></tr>
-  <tr><td><code>gallery_image_opened</code></td><td>You open an image in the Gallery</td></tr>
-</table>
-
-<h3 style="font-size:1rem;margin:1.5rem 0 .4rem;">Crash reports</h3>
-<p>If the app crashes, a report is sent so the fault can be fixed. It contains
-the technical details of the crash — the error, where in the code it happened,
-your device model and Android version. It does not contain the contents of
-your Collections, your searches, or anything you have typed.</p>
-
-<h2>Who else sees this</h2>
-<table>
-  <tr><th>Service</th><th>What it receives</th><th>Why</th></tr>
-  <tr>
-    <td>Google Firebase<br>(Analytics &amp; Crashlytics)</td>
-    <td>The usage events and crash reports above</td>
-    <td>To understand which prompts are useful and to fix crashes.
-        <a href="https://firebase.google.com/support/privacy">Firebase privacy</a></td>
-  </tr>
-  <tr>
-    <td>Cloudinary</td>
-    <td>Requests for prompt artwork, as any image request does</td>
-    <td>Delivers images sized for your screen instead of full resolution.</td>
-  </tr>
-  <tr>
-    <td>Our own server</td>
-    <td>The installation ID and which prompts are requested</td>
-    <td>Serves the catalogue and counts how many people are using the app.</td>
-  </tr>
-</table>
-<p>We do not sell data, and we do not share it with advertisers or data
-brokers. There are none involved.</p>
-
-<h2>Children</h2>
-<p>Promptlyn is not directed at children under 13, and we do not knowingly
-collect anything from them. Since the app collects no personal information
-from anyone, there is nothing about a child to collect either.</p>
-
-<h2>Your choices</h2>
-<ul>
-  <li><strong>Delete everything:</strong> uninstall the app, or clear its data
-      in Android Settings. Saved prompts, search history, and the installation
-      ID are all removed, and the ID cannot be reconstructed.</li>
-  <li><strong>Ask us:</strong> because nothing we hold is tied to your
-      identity, we cannot look up "your" data on request — there is no name or
-      email to look it up by. If you have a question about any of this, write
-      to us.</li>
-</ul>
-
-<h2>Changes</h2>
-<p>If this policy changes in a way that affects what is collected, the date at
-the top changes with it, and the change is described in the app's release
-notes.</p>
-
-<h2>Contact</h2>
-<p><a href="mailto:support@promptlyn.com">support@promptlyn.com</a></p>
-
 <footer>
-  <a href="/">Promptlyn</a> · <a href="/terms">Terms of Service</a>
+  <a href="/">Promptlyn</a>
+  <a href="/terms">Terms of Service</a>
+  <span class="spacer"></span>
+  <span>Last updated 17 August 2026</span>
 </footer>
 
-</main>
 </body>
 </html>

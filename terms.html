@@ -3,125 +3,409 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Terms of Service for the Promptlyn Android app and promptlyn.com.">
+<meta name="robots" content="index, follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 <title>Terms of Service — Promptlyn</title>
 <style>
+  /* Same palette as the app (lib/core/theme/app_colors.dart) and the privacy
+     page, so the three read as one product. */
   :root {
     color-scheme: light dark;
-    --bg: #ffffff;
-    --fg: #17171c;
-    --muted: #5c5c6b;
-    --rule: #e4e4ec;
-    --accent: #7c3aed;
+    --bg: #E9E6F3;
+    --surface: #F4F2FA;
+    --surface-alt: #DFDAEF;
+    --border: #CFC8E4;
+    --label: #171426;
+    --label-2: #575270;
+    --label-3: #7B7593;
+    --accent: #6D28D9;
+    --grad: linear-gradient(135deg, #8B5CF6, #3B82F6);
+    --shadow: 0 1px 2px rgba(23, 20, 38, .06), 0 8px 24px rgba(23, 20, 38, .06);
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #101015; --fg: #ececf1; --muted: #9c9cae; --rule: #26262f; --accent: #a78bfa; }
+    :root {
+      --bg: #0A0817;
+      --surface: #161228;
+      --surface-alt: #1E1936;
+      --border: #2E2751;
+      --label: #F7F6FB;
+      --label-2: #B3ADCB;
+      --label-3: #8A83A8;
+      --accent: #A78BFA;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
+    }
   }
+
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     margin: 0;
     background: var(--bg);
-    color: var(--fg);
-    font: 16px/1.65 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--label);
+    font: 400 16px/1.7 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
   }
-  main { max-width: 44rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
-  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 .35rem; letter-spacing: -.02em; }
-  h2 { font-size: 1.15rem; margin: 2.5rem 0 .6rem; letter-spacing: -.01em; }
-  .updated { color: var(--muted); font-size: .9rem; margin: 0 0 2.5rem; }
-  .lede { font-size: 1.06rem; }
-  a { color: var(--accent); }
-  ul { padding-left: 1.15rem; }
-  li { margin: .4rem 0; }
-  .note { border-left: 3px solid var(--accent); padding: .1rem 0 .1rem 1rem; margin: 1.5rem 0; color: var(--muted); }
-  footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: .9rem; }
+
+  .top { background: var(--grad); color: #fff; padding: 2.75rem 1.25rem 3.25rem; }
+  .top-inner { max-width: 52rem; margin: 0 auto; }
+  .brand {
+    display: inline-flex; align-items: center; gap: .6rem;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-weight: 800; font-size: 1.05rem; letter-spacing: -.01em;
+    color: #fff; text-decoration: none; opacity: .95;
+  }
+  .mark {
+    width: 30px; height: 30px; border-radius: 9px;
+    background: rgba(255,255,255,.22);
+    display: grid; place-items: center;
+    font-weight: 800; font-size: .95rem;
+    border: 1px solid rgba(255,255,255,.28);
+  }
+  .top h1 {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-size: clamp(2rem, 5vw, 2.6rem); font-weight: 800;
+    letter-spacing: -.03em; line-height: 1.15; margin: 1.6rem 0 .5rem;
+  }
+  .top .meta { opacity: .9; font-size: .95rem; margin: 0; }
+
+  .wrap { max-width: 52rem; margin: -1.75rem auto 0; padding: 0 1.25rem 5rem; display: grid; gap: 1.25rem; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 1.6rem 1.5rem; box-shadow: var(--shadow);
+    /* Grid items default to min-width:auto, so a wide table inside would
+       stretch the card past the viewport and scroll the whole page sideways
+       on a phone. .table-scroll only contains it once this is set. */
+    min-width: 0;
+  }
+  .card.glance { background-image: linear-gradient(var(--surface), var(--surface)), var(--grad); background-origin: border-box; background-clip: padding-box, border-box; border-color: transparent; }
+
+  h2 {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-size: 1.2rem; font-weight: 700; letter-spacing: -.015em;
+    margin: 0 0 .5rem; scroll-margin-top: 1rem;
+  }
+  h2 .num { display: inline-block; min-width: 1.6rem; color: var(--accent); font-weight: 800; }
+  h3 { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 .35rem; }
+  p { margin: .7rem 0; color: var(--label-2); }
+  p.tight { margin-top: 0; }
+  strong { color: var(--label); font-weight: 600; }
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+
+  ul, ol { padding-left: 1.2rem; margin: .7rem 0; color: var(--label-2); }
+  li { margin: .45rem 0; }
+  li::marker { color: var(--accent); }
+
+  .glance ul { list-style: none; padding: 0; margin: .8rem 0 0; }
+  .glance li { display: grid; grid-template-columns: 1.6rem 1fr; gap: .5rem; margin: .6rem 0; }
+  .glance .dot { color: var(--accent); font-weight: 700; }
+
+  .table-scroll { overflow-x: auto; margin: 1rem 0; -webkit-overflow-scrolling: touch; }
+  table { border-collapse: collapse; width: 100%; min-width: 28rem; font-size: .93rem; }
+  thead th { text-align: left; font-weight: 600; color: var(--label); background: var(--surface-alt); padding: .65rem .75rem; white-space: nowrap; }
+  thead th:first-child { border-radius: 10px 0 0 10px; }
+  thead th:last-child { border-radius: 0 10px 10px 0; }
+  td { padding: .7rem .75rem; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--label-2); }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  code { background: var(--surface-alt); color: var(--label); padding: .12em .4em; border-radius: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .87em; }
+
+  .note { background: var(--surface-alt); border-radius: 12px; padding: .9rem 1.1rem; margin: 1.1rem 0; color: var(--label-2); font-size: .95rem; }
+  .note strong { display: block; margin-bottom: .2rem; color: var(--label); }
+
+  .toc ol { list-style: none; padding: 0; margin: .6rem 0 0; columns: 2; column-gap: 1.75rem; }
+  .toc li { margin: .3rem 0; break-inside: avoid; }
+  .toc a { color: var(--label-2); text-decoration: none; font-size: .94rem; }
+  .toc a:hover { color: var(--accent); }
+  .toc .n { color: var(--accent); font-weight: 700; margin-right: .35rem; }
+  @media (max-width: 34rem) { .toc ol { columns: 1; } }
+
+  footer {
+    max-width: 52rem; margin: 0 auto; padding: 2rem 1.25rem 3rem;
+    border-top: 1px solid var(--border); color: var(--label-3); font-size: .9rem;
+    display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; align-items: center;
+  }
+  footer a { color: var(--label-2); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+  .spacer { flex: 1; }
 </style>
 </head>
 <body>
-<main>
 
-<h1>Terms of Service</h1>
-<p class="updated">Promptlyn · Last updated 17 August 2026</p>
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="/"><span class="mark">P</span> Promptlyn</a>
+    <h1>Terms of Service</h1>
+    <p class="meta">Applies to the Promptlyn Android app (<code style="background:rgba(255,255,255,.18);color:#fff">com.promptlyn.app</code>) and promptlyn.com<br>
+    Effective 17 August 2026 · Last updated 17 August 2026</p>
+  </div>
+</header>
 
-<p class="lede">Promptlyn is a free library of prompts for AI tools. Using the
-app means accepting these terms. They are short because the app asks little of
-you: there is no account, no payment, and nothing to subscribe to.</p>
+<div class="wrap">
 
-<h2>What Promptlyn is</h2>
-<p>A catalogue of prompts you can read, copy, and use in AI tools such as
-ChatGPT, Gemini, Claude, Midjourney and others. The app copies a prompt to your
-clipboard and can open the chosen tool for you. It does not run the prompt
-itself and is not connected to, endorsed by, or affiliated with any of those
-companies.</p>
+  <section class="card glance">
+    <h2>The short version</h2>
+    <ul>
+      <li><span class="dot">→</span><span>Promptlyn is free. No account, no payment, no subscription.</span></li>
+      <li><span class="dot">→</span><span>Use the prompts however you like, including commercially. No credit needed.</span></li>
+      <li><span class="dot">→</span><span>Don't scrape the catalogue to republish it as your own.</span></li>
+      <li><span class="dot">→</span><span>What an AI tool generates from a prompt is between you and that tool.</span></li>
+      <li><span class="dot">→</span><span>The full terms below are what actually applies.</span></li>
+    </ul>
+  </section>
 
-<h2>Using the prompts</h2>
-<p>Use them freely — personally or commercially, as written or modified. No
-attribution is required.</p>
-<p>You may not redistribute the catalogue itself: scraping the collection to
-republish it as your own library, app, or dataset is not permitted. Individual
-prompts, used as prompts, are yours to use.</p>
+  <nav class="card toc" aria-label="Contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#accept"><span class="n">1</span>Accepting these terms</a></li>
+      <li><a href="#what"><span class="n">2</span>What Promptlyn is</a></li>
+      <li><a href="#eligibility"><span class="n">3</span>Who may use it</a></li>
+      <li><a href="#licence"><span class="n">4</span>Your licence to the prompts</a></li>
+      <li><a href="#ours"><span class="n">5</span>What remains ours</a></li>
+      <li><a href="#acceptable"><span class="n">6</span>Acceptable use</a></li>
+      <li><a href="#thirdparty"><span class="n">7</span>Third-party AI tools</a></li>
+      <li><a href="#output"><span class="n">8</span>AI output and your responsibility</a></li>
+      <li><a href="#gallery"><span class="n">9</span>Gallery artwork</a></li>
+      <li><a href="#availability"><span class="n">10</span>Availability and changes</a></li>
+      <li><a href="#warranty"><span class="n">11</span>No warranty</a></li>
+      <li><a href="#liability"><span class="n">12</span>Limitation of liability</a></li>
+      <li><a href="#indemnity"><span class="n">13</span>Indemnity</a></li>
+      <li><a href="#privacy"><span class="n">14</span>Privacy</a></li>
+      <li><a href="#termination"><span class="n">15</span>Termination</a></li>
+      <li><a href="#law"><span class="n">16</span>Governing law</a></li>
+      <li><a href="#misc"><span class="n">17</span>General</a></li>
+      <li><a href="#contact"><span class="n">18</span>Contact</a></li>
+    </ol>
+  </nav>
 
-<h2>What we do not promise</h2>
-<p>A prompt is a starting point, not a guaranteed result. AI tools produce
-different output for the same prompt on different days, and what those tools
-generate is between you and them. In particular:</p>
-<ul>
-  <li>We do not guarantee any prompt produces a particular result, or any
-      useful result.</li>
-  <li>We are not responsible for what an AI tool generates from a prompt, nor
-      for what you do with it.</li>
-  <li>Checking that output is accurate, lawful, and appropriate before you rely
-      on it is your responsibility — this matters most for anything
-      professional, medical, legal, or financial.</li>
-  <li>Third-party tools have their own terms and prices. Following a launch
-      button takes you to their service, governed by their rules.</li>
-</ul>
+  <section class="card">
+    <h2 id="accept"><span class="num">1</span>Accepting these terms</h2>
+    <p class="tight">By downloading, opening, or using the Promptlyn app or website, you agree
+    to these terms. If you do not agree, please do not use them. In these terms,
+    “we” and “Promptlyn” mean the publisher of the app, and “you” means the
+    person using it.</p>
+    <p>These terms are between you and us. Google is not a party to them and is
+    not responsible for the app or its content.</p>
+  </section>
 
-<h2>Images in the Gallery</h2>
-<p>Gallery artwork illustrates what a prompt can produce. Those images are for
-reference within the app and are not licensed for you to redistribute. What
-you generate yourself with a prompt belongs to you, subject to the terms of the
-tool that generated it.</p>
+  <section class="card">
+    <h2 id="what"><span class="num">2</span>What Promptlyn is</h2>
+    <p class="tight">Promptlyn is a catalogue of written prompts for AI tools. You can browse
+    them, read them, save them, copy them, and open them in an external AI
+    service such as ChatGPT, Gemini, Claude, Grok, Midjourney, or others.</p>
+    <p>Promptlyn does not run prompts and generates nothing itself. It is a
+    library, not an AI service. It is not affiliated with, endorsed by, or
+    sponsored by any of the AI companies whose tools it can open.</p>
+  </section>
 
-<h2>Fair use of the service</h2>
-<p>Please do not attempt to overload the servers, bypass rate limits, or scrape
-the catalogue in bulk. Access may be restricted where usage threatens the
-service for everyone else.</p>
+  <section class="card">
+    <h2 id="eligibility"><span class="num">3</span>Who may use it</h2>
+    <p class="tight">You must be at least 13 years old, or the minimum age of digital consent
+    where you live if that is higher. If you are under 18, you should have a
+    parent or guardian's permission. The app carries no ads and no purchases.</p>
+  </section>
 
-<h2>Availability</h2>
-<p>Promptlyn is provided as it is, without warranty. We may add, change, or
-remove prompts, features, or the service itself. Prompts you have saved live on
-your own device, so they remain with you even if the catalogue changes.</p>
+  <section class="card">
+    <h2 id="licence"><span class="num">4</span>Your licence to the prompts</h2>
+    <p class="tight">We grant you a worldwide, royalty-free, non-exclusive licence to use the
+    prompt text in the app:</p>
+    <ul>
+      <li>For personal or commercial purposes.</li>
+      <li>As written, or modified however you like.</li>
+      <li>Without crediting Promptlyn.</li>
+      <li>In any AI tool, and in your own work built on that output.</li>
+    </ul>
+    <p>This licence is for using prompts <em>as prompts</em>. It is not a
+    licence to redistribute the catalogue — see section 5.</p>
+  </section>
 
-<div class="note">
-The app keeps working offline with whatever it has already downloaded, but it
-needs a connection to fetch anything new.
+  <section class="card">
+    <h2 id="ours"><span class="num">5</span>What remains ours</h2>
+    <p class="tight">The app, the website, the Promptlyn name and logo, the design, the
+    curation and organisation of the catalogue, and the catalogue taken as a
+    whole remain our property, protected by copyright and other rights.</p>
+    <p>Specifically, you may not:</p>
+    <ul>
+      <li>Copy the catalogue in bulk, whether by hand, by script, or by
+          automated scraping.</li>
+      <li>Republish the collection — or a substantial part of it — as your own
+          library, app, website, dataset, or training corpus.</li>
+      <li>Resell access to the catalogue.</li>
+      <li>Use the Promptlyn name or logo in a way that suggests we endorse
+          something we do not.</li>
+    </ul>
+    <p>Individual prompts, used as prompts, are always yours to use freely.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="acceptable"><span class="num">6</span>Acceptable use</h2>
+    <p class="tight">Please do not:</p>
+    <ul>
+      <li>Attempt to overload, disrupt, or gain unauthorised access to our
+          servers, or bypass rate limits.</li>
+      <li>Reverse engineer, decompile, or tamper with the app, except where
+          the law expressly permits it.</li>
+      <li>Use the app to break the law, infringe someone's rights, or generate
+          content that is unlawful, harassing, hateful, sexually explicit
+          involving minors, or intended to deceive or defraud.</li>
+      <li>Remove or obscure any notice in the app.</li>
+    </ul>
+    <p>We may limit or withdraw access where use threatens the service or other
+    users.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="thirdparty"><span class="num">7</span>Third-party AI tools</h2>
+    <p class="tight">When you use a launch button, the prompt is copied to your clipboard and
+    the chosen tool is opened. From that point you are using a service run by
+    another company, under its own terms, pricing, and privacy policy.</p>
+    <p>Those services may charge for use, may require an account, may change or
+    disappear, and may produce results different from what the prompt suggests.
+    None of that is within our control, and we are not responsible for it. We
+    are not affiliated with any of them.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="output"><span class="num">8</span>AI output and your responsibility</h2>
+    <p class="tight">A prompt is a starting point, not a guarantee. The same prompt can produce
+    entirely different results in different tools, or in the same tool on
+    different days.</p>
+    <div class="note">
+      <strong>Check the output before you rely on it.</strong>
+      AI tools state things that are wrong with complete confidence. This
+      matters most for anything professional, medical, legal, financial, or
+      safety-related. Promptlyn is not a substitute for professional advice.
+    </div>
+    <p>You are responsible for what you generate and what you do with it,
+    including whether it is accurate, lawful, and appropriate for its purpose,
+    and whether it infringes anyone's rights. Ownership of AI output is governed
+    by the terms of the tool that produced it and by the law of your country,
+    which is still developing in this area — we make no representation about who
+    owns what an AI tool generates.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="gallery"><span class="num">9</span>Gallery artwork</h2>
+    <p class="tight">Images in the Gallery illustrate what a prompt can produce. They are
+    provided for reference inside the app and are not licensed for you to
+    download, redistribute, or use commercially.</p>
+    <p>What you generate yourself using a prompt is a separate matter, governed
+    by section 8 and by the tool that produced it.</p>
+    <p>If you believe any image or prompt in the app infringes your copyright,
+    write to <a href="mailto:support@promptlyn.com">support@promptlyn.com</a>
+    with enough detail to identify the work and where it appears. We remove
+    infringing material promptly once verified.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="availability"><span class="num">10</span>Availability and changes</h2>
+    <p class="tight">We may add, change, or remove prompts, categories, features, or the
+    service itself at any time, and may do so without notice. We do not
+    guarantee uninterrupted availability.</p>
+    <p>Prompts you have saved are stored on your own device, so they remain with
+    you even if the catalogue changes or a prompt is withdrawn.</p>
+    <div class="note">
+      <strong>Offline</strong>
+      The app keeps working with whatever it has already downloaded, but needs a
+      connection to fetch anything new.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 id="warranty"><span class="num">11</span>No warranty</h2>
+    <p class="tight">The app and website are provided “as is” and “as available”, without
+    warranties of any kind, whether express or implied, including any implied
+    warranties of merchantability, fitness for a particular purpose, or
+    non-infringement.</p>
+    <p>Some jurisdictions do not allow the exclusion of implied warranties. In
+    those places, this section applies only to the extent permitted, and nothing
+    here removes statutory rights you have as a consumer.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="liability"><span class="num">12</span>Limitation of liability</h2>
+    <p class="tight">To the fullest extent the law allows, we are not liable for indirect,
+    incidental, special, consequential, or punitive damages, or for loss of
+    profits, data, goodwill, or business, arising out of your use of the app —
+    including anything a third-party AI tool generates from a prompt found
+    here.</p>
+    <p>Where liability cannot be excluded, our total liability to you is limited
+    to the greater of the amount you paid us in the twelve months before the
+    claim (which, the app being free, is normally nothing) or USD 50.</p>
+    <p>Nothing in these terms limits liability for death or personal injury
+    caused by negligence, for fraud, or for anything else that cannot lawfully
+    be limited.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="indemnity"><span class="num">13</span>Indemnity</h2>
+    <p class="tight">You agree to indemnify us against claims, losses, and reasonable legal
+    costs arising from your misuse of the app, your breach of these terms, or
+    your infringement of someone else's rights — including through content you
+    generate using a prompt from the catalogue.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="privacy"><span class="num">14</span>Privacy</h2>
+    <p class="tight">How we handle data is set out in the
+    <a href="/privacy">Privacy Policy</a>, which forms part of these terms. In
+    short: no account, no personal information, anonymous usage statistics, and
+    crash reports.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="termination"><span class="num">15</span>Termination</h2>
+    <p class="tight">You may stop using Promptlyn at any time by uninstalling the app; that
+    also erases everything stored on your device.</p>
+    <p>We may suspend or end your access if you breach these terms or use the
+    service in a way that harms it or other users. Sections 5, 8, and 11 to 13
+    survive termination.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="law"><span class="num">16</span>Governing law</h2>
+    <p class="tight">These terms are governed by the laws of Bangladesh, and the courts of
+    Bangladesh have jurisdiction over any dispute. If you are a consumer
+    resident elsewhere, this does not deprive you of the protection of mandatory
+    consumer law in your country of residence, nor of the right to bring
+    proceedings there.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="misc"><span class="num">17</span>General</h2>
+    <ul>
+      <li><strong>Whole agreement.</strong> These terms and the Privacy Policy
+          are the entire agreement between us about the app.</li>
+      <li><strong>Severability.</strong> If a provision is held unenforceable,
+          the rest remains in force.</li>
+      <li><strong>No waiver.</strong> Not enforcing a term on one occasion does
+          not waive it.</li>
+      <li><strong>Assignment.</strong> You may not transfer your rights under
+          these terms; we may transfer ours to a successor of the service.</li>
+      <li><strong>Changes.</strong> We may revise these terms. The “last
+          updated” date changes with them, and material changes are noted in the
+          app's release notes. Continuing to use the app after a change means
+          accepting the revised terms.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2 id="contact"><span class="num">18</span>Contact</h2>
+    <p class="tight">Questions about these terms, or a copyright concern:</p>
+    <p><a href="mailto:support@promptlyn.com">support@promptlyn.com</a></p>
+  </section>
+
 </div>
 
-<h2>Liability</h2>
-<p>To the extent the law allows, we are not liable for indirect or
-consequential loss arising from use of the app — including anything produced by
-a third-party AI tool from a prompt found here. Nothing in these terms limits
-rights that cannot be limited under the law where you live.</p>
-
-<h2>Privacy</h2>
-<p>Covered separately, in the <a href="/privacy">Privacy Policy</a>. In short:
-no account, no personal data, and an anonymous count of how many people use
-the app.</p>
-
-<h2>Changes</h2>
-<p>These terms may change. The date at the top shows when they last did, and
-continuing to use the app after a change means accepting the revised terms.</p>
-
-<h2>Contact</h2>
-<p><a href="mailto:support@promptlyn.com">support@promptlyn.com</a></p>
-
 <footer>
-  <a href="/">Promptlyn</a> · <a href="/privacy">Privacy Policy</a>
+  <a href="/">Promptlyn</a>
+  <a href="/privacy">Privacy Policy</a>
+  <span class="spacer"></span>
+  <span>Last updated 17 August 2026</span>
 </footer>
 
-</main>
 </body>
 </html>
